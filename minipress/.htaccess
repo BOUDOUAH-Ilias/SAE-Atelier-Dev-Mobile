@@ -1,13 +1,5 @@
 RewriteEngine On
-#
-# RewriteBase indispensable sur webetu :
-RewriteBase /giftbox/gift.appli
-#
-# Pour interdire l'accès aux répertoires contenant du code
-#RewriteRule ^sql(/.*|)$ - [NC,F]
-#RewriteRule ^src(/.*|)$ - [NC,F]
-#
-# réécriture pour slim
+RewriteBase /SAE-Atelier-Dev-Mobile/minipress
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [QSA,L]
