@@ -1,0 +1,55 @@
+networks:
+  minipress.net:
+    driver: bridge
+
+services:
+  sql:
+    image: mariadb:11
+    environment:
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3307:3306"
+    networks:
+      - minipress.net
+
+  adminer:
+    image: adminer:5
+    ports:
+      - "67:8080"
+    networks:
+      - minipress.net
+    depends_on:
+      - sql
+
+  minipress.appli:
+    image: operrin/php:8.5.4
+    command: php -S 0.0.0.0:80 -t /var/www/html
+    ports:
+      - "666:80"
+    volumes:
+      - ./minipress:/var/www/html
+      - ./images:/var/www/html/img
+      - ./minipress/src:/var/www/src
+    working_dir: /var/www/src
+    networks:
+      - minipress.net
+    depends_on:
+      - sql
+
+  minipress.api:
+    image: operrin/php:8.5.4
+    command: php -S 0.0.0.0:80 -t /var/www/html
+    ports:
+      - "69:80"
+    volumes:
+      - ./minipress:/var/www/html
+      - ./minipress/src:/var/www/src
+      - ./minipress/src:/var/www/minipress/src
+    working_dir: /var/www/src
+    networks:
+      - minipress.net
+    depends_on:
+      - sql
