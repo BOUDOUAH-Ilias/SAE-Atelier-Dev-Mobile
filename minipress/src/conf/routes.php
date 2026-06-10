@@ -11,4 +11,6 @@ return function (\Slim\App $app): void {
         ->setName('api_categories');
 
   
+    $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
+        ->setName('article.create');
 };
