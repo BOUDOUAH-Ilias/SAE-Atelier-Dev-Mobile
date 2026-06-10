@@ -9,4 +9,7 @@ return function (\Slim\App $app): void {
 
     $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
         ->setName('article.create');
+
+    $app->post('/article/create', minipress\webui\actions\CreateArticleAction::class)
+        ->setName('article.create.post');
 };
