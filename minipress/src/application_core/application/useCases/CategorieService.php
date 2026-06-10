@@ -2,7 +2,8 @@
 
 namespace minipress\application_core\application\useCases;
 
-use gift\appli\application_core\domain\entities\Categorie;
+use minipress\application_core\domain\entities\Categorie;
+use minipress\application_core\application\useCases\CategorieInterface;
 
 class CategorieService implements CategorieInterface {
 

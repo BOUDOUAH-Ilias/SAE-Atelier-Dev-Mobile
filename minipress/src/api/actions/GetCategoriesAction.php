@@ -9,8 +9,8 @@ use minipress\application_core\application\useCases\CategorieService;
 
 class GetCategoriesAction {
 
-public function __invoke(Request $rs, Response $response, array $args){
-    $service = new CategoriesService();
+public function __invoke(Request $rq, Response $rs, array $args){
+    $service = new CategorieService();
     $categories = $service->getCategories();
 
     $data = [
