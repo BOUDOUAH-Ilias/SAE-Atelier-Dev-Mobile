@@ -22,7 +22,7 @@
         <textarea id="contenu" name="contenu" required rows="8" cols="60"></textarea>
     </div><br>
 
-    <div>
+    {# <div>
         <label for="id_categorie">Catégorie *</label><br>
         <select id="id_categorie" name="id_categorie" required>
             <option value="">-- Choisir --</option>
@@ -30,7 +30,7 @@
                 <option value="{{ categorie.id }}">{{ categorie.nom }}</option>
             {% endfor %}
         </select>
-    </div><br>
+    </div><br> #}
 
     <div>
         <label for="image_url">URL de l'image</label><br>

@@ -13,7 +13,6 @@ class ShowCreateArticleAction{
 
     public function __invoke(Request $request, Response $response, array $args): Response{
         $view = Twig::fromRequest($request);
-        return $view->render($response, 'form.create.article.twig'
-        );
+        return $view->render($response, 'form.create.article.twig'  );
     }
 }
