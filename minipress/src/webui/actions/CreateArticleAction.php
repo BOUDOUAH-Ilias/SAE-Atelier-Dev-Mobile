@@ -21,7 +21,7 @@ class CreateArticleAction{
             publie:      isset($data['publie']),
             imageUrl:    $data['image_url'] ?? null,
             idCategorie: (int) $data['id_categorie'],
-            idAuteur:    (int) $_SESSION['auth_user']['id'],
+            idAuteur:    (int) ($_SESSION['auth_user']['id'] ?? 1),
         );
 
         return $response->withHeader('Location', '/')->withStatus(200);
