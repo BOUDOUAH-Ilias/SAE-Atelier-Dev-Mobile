@@ -10,6 +10,9 @@ return function (\Slim\App $app): void {
   $app->get('/api/categories', minipress\api\actions\GetCategoriesAction::class)
         ->setName('api_categories');
 
+  $app->get('/api/categories/{id}/articles', minipress\api\actions\GetArticlesByCategorieAction::class)
+        ->setName('api_articleByCategorie');
+
   $app->get('/api/articles', minipress\api\actions\GetArticlesAction::class)
         ->setName('api_articles');
 

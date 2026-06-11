@@ -10,13 +10,9 @@ interface GestionArticleServiceInterface{
 
     public function getArticleDesc(): array;
 
-<<<<<<< Updated upstream
     public function getArticles(): array;
 
     public function getArticleByCategorie(int $idCategorie): array;
-=======
-        public function getArticles(): array;
->>>>>>> Stashed changes
 
 
 }
