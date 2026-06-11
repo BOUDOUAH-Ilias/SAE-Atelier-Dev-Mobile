@@ -18,5 +18,17 @@ class GestionArticleService implements GestionArticleServiceInterface{
         $article->id_auteur    = $idAuteur;
         $article->save();
     }
+
+    public function getArticles(): array {
+        return Article::all()->toArray();
+    }
+
+    public function getArticleById(int $id): array {
+        try {
+            return Article::findOrFail($id)->toArray();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new EntityNotFoundException("Article", $id);
+        }
+    }
 }
 ?>

@@ -5,13 +5,13 @@ namespace minipress\api\actions;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use minipress\application_core\application\useCases\ArticleService;
+use minipress\application_core\application\useCases\GestionArticleService;
 
 class GetArticleByIdAction {
 
 public function __invoke(Request $rq, Response $rs, array $args){
     $id = intval($args['id']);
-    $service = new ArticleService();
+    $service = new GestionArticleService();
     $art = $service->getArticleById($id);
 
     $data = [

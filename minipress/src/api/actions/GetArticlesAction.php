@@ -5,12 +5,12 @@ namespace minipress\api\actions;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use minipress\application_core\application\useCases\ArticleService;
+use minipress\application_core\application\useCases\GestionArticleService;
 
 class GetArticlesAction {
 
 public function __invoke(Request $rq, Response $rs, array $args){
-    $service = new ArticleService();
+    $service = new GestionArticleService();
     $articles = $service->getArticles();
 
     $data = [
