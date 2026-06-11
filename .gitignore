@@ -1,6 +1,23 @@
+# MiniPress.core (existant)
 vendor/*
 **/vendor/*
 db.ini
 **/db.ini
 .env
 **/.env
+
+# MiniPress.web - dépendances
+node_modules/
+**/node_modules/
+
+# MiniPress.web - build
+dist/
+**/dist/
+
+# MiniPress.web - cache Vite
+.vite/
+**/.vite/
+
+# OS
+.DS_Store
+Thumbs.db
