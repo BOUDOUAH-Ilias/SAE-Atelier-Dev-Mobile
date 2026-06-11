@@ -19,6 +19,7 @@ return function (\Slim\App $app): void {
     $app->get('/api/articles/{id}', minipress\api\actions\GetArticleByIdAction::class)
         ->setName('api_articleById');
 
+
     $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
         ->setName('article.create');
 
@@ -36,8 +37,6 @@ return function (\Slim\App $app): void {
 
     $app->post('/categorie/create', minipress\webui\actions\CreateCategorieAction::class)
         ->setName('categorie.create.post');
-
-
 
     $app->get('/api/auteurs/{id}/articles', minipress\api\actions\GetArticleByAuthorAction::class)
         ->setName('api_articles_par_autheur');
