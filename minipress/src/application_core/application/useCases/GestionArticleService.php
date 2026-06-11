@@ -24,14 +24,23 @@ class GestionArticleService implements GestionArticleServiceInterface{
         return Article::orderBy('date_creation', 'desc')->get()->toArray();
     }
 
-     public function getArticles(): array {
-        return Article::all()->toArray();
-    }
 
-    #[Override]
     public function getArticleByCategorie(int $idCategorie): array
     {
         return Article::where('id_categorie', $idCategorie)->get()->toArray();
+    }
+  
+
+    public function getArticles(): array {
+        return Article::all()->toArray();
+    }
+
+    public function getArticleById(int $id): array {
+        try {
+            return Article::findOrFail($id)->toArray();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new EntityNotFoundException("Article", $id);
+        }
     }
 }
 ?>

@@ -22,9 +22,6 @@ public function __invoke(Request $rq, Response $rs, array $args){
                         'id'          => $cat['id'],
                         'nom'     => $cat['nom'],
                     ],
-                    'links' => [
-                        'self' => ['href' => '/categories/' . $cat['id'] . '/'],
-                    ],
                 ];
             }, $categories),
         ];
