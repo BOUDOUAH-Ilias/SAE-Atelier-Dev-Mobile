@@ -14,3 +14,20 @@ export interface Article {
   id_categorie: number;
   id_auteur: number;
 }
+
+export interface ArticleListItem {
+  article: {
+    titre: string;
+    date_creation: string;
+    auteur: number;
+  };
+  links: {
+    self: { href: string };
+  };
+}
+
+export interface ArticlesResponse {
+  type: string;
+  count: number;
+  articles: ArticleListItem[];
+}
