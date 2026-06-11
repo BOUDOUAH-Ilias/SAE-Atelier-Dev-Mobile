@@ -7,6 +7,7 @@ use minipress\application_core\domain\entities\User;
 class Article extends Model{
 
     public $table = "article";
+    public $timestamps = false;
 
     public const CREATED_AT = 'date_creation';
     public const UPDATED_AT = null;

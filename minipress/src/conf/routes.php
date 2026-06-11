@@ -10,8 +10,11 @@ return function (\Slim\App $app): void {
   $app->get('/api/categories', minipress\api\actions\GetCategoriesAction::class)
         ->setName('api_categories');
 
+  $app->get('/api/articles', minipress\api\actions\GetArticlesAction::class)
+        ->setName('api_articles');
+
   
-    $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
+  $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
         ->setName('article.create');
 
     $app->post('/article/create', minipress\webui\actions\CreateArticleAction::class)
