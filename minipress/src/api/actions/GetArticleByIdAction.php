@@ -7,28 +7,31 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use minipress\application_core\application\useCases\ArticleService;
 
-class GetArticlesAction {
+class GetArticleByIdAction {
 
 public function __invoke(Request $rq, Response $rs, array $args){
+    $id = intval($args['id']);
     $service = new ArticleService();
-    $articles = $service->getArticles();
+    $art = $service->getArticleById($id);
 
     $data = [
             'type'       => 'collection',
-            'count'      => count($articles),
-            'articles' => array_map(function (array $art) {
-                return [
+            'articles' => 
+                 [
                     'article' => [
+                        'id'          => $id,
                         'titre'          => $art['titre'],
+                        'resume'          => $art['resume'],
+                        'contenu'          => $art['contenu'],
                         'date_creation'     => $art['date_creation'],
+                        'publie'          => $art['publie'],
+                        'image_url'          => $art['image_url'],
+                        'categorie'          => $art['id_categorie'],
                         'auteur'     => $art['id_auteur'],
                     ],
 
-                    'links' => [
-                        'self' => ['href' => '/articles/' . $art['id'] . '/'],
-                    ],
-                ];
-            }, $articles),
+
+                ]
         ];
 
     $rs->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
