@@ -18,5 +18,9 @@ class GestionArticleService implements GestionArticleServiceInterface{
         $article->id_auteur    = $idAuteur;
         $article->save();
     }
+
+    public function getArticle() : array{
+        return Article::all()->toArray();
+    }
 }
 ?>
