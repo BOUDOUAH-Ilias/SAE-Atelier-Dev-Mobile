@@ -23,6 +23,6 @@ class GestionArticleService implements GestionArticleServiceInterface
 
     public function getArticlesParAutheurId(int $idAuteur): array
     {
-        return Article::where('id_auteur', $idAuteur)->with('auteur')->get()->all();
+        return Article::where('id_auteur', $idAuteur)->where('publie', 1)->with('auteur')->get()->all();
     }
 }
