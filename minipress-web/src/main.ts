@@ -8,8 +8,7 @@ async function renderAllArticles() {
     const api = new ArticlesApi();
   const data = await api.getArticles();
 
-  const response = await fetch("/templates/article-list.hbs");
-  const templateSource = await response.text();
+  const templateSource = document.getElementById("list_template")!.innerHTML;
   const template = Handlebars.compile(templateSource);
 
   document.getElementById("app")!.innerHTML = template({ articles: data });
