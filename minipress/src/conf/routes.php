@@ -40,4 +40,10 @@ return function (\Slim\App $app): void {
 
     $app->get('/api/auteurs/{id}/articles', minipress\api\actions\GetArticleByAuthorAction::class)
         ->setName('api_articles_par_autheur');
+
+    $app->get('/admin/user/create', minipress\webui\actions\ShowCreateUserAction::class)
+        ->setName('user.create');
+
+    $app->post('/admin/user/create', minipress\webui\actions\CreateUserAction::class)
+        ->setName('user.create.post');
 };

@@ -1,0 +1,36 @@
+{% extends "home.html.twig" %}
+
+{% block title %}Nouvel utilisateur – Minipress{% endblock %}
+
+{% block content %}
+<h2>Créer un utilisateur (Admin)</h2>
+
+{% if error %}
+    <div style="color: #721c24; background-color: #f8d7da; padding: 10px; margin-bottom: 15px; border-radius: 4px; max-width: 500px;">
+        <strong>Erreur :</strong> {{ error }}
+    </div>
+{% endif %}
+
+{% if success %}
+    <div style="color: #155724; background-color: #d4edda; padding: 10px; margin-bottom: 15px; border-radius: 4px; max-width: 500px;">
+        {{ success }}
+    </div>
+{% endif %}
+
+<form method="post" action="{{ base_path }}/admin/user/create" style="max-width: 500px;">
+
+    <div>
+        <label for="email">Adresse Email (Identifiant) *</label><br>
+        <input type="email" id="email" name="email" required maxlength="255" placeholder="exemple@mail.com" style="width: 100%; padding: 6px; margin-top: 5px;">
+    </div><br>
+
+    <div>
+        <label for="password">Mot de passe *</label><br>
+        <input type="password" id="password" name="password" required minlength="6" placeholder="Au moins 6 caractères" style="width: 100%; padding: 6px; margin-top: 5px;">
+    </div><br>
+
+    <button type="submit">Créer l'utilisateur</button>
+    <a href="{{ base_path }}/">Annuler</a>
+
+</form>
+{% endblock %}

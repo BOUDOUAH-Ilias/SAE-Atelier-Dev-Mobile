@@ -4,12 +4,14 @@ namespace minipress\application_core\application\useCases;
 use minipress\application_core\domain\entities\User;
 use minipress\application_core\domain\entities\Article;
 
-class GestionUserService implements GestionUserServiceInterface {
+class GestionUserService implements GestionUserServiceInterface
+{
 
     /**
      * Authentifie un utilisateur avec email et mot de passe
      */
-    public function authenticateUser($email, $password) {
+    public function authenticateUser($email, $password)
+    {
         if (empty($email) || empty($password)) {
             throw new \InvalidArgumentException('Email et mot de passe requis');
         }
@@ -30,7 +32,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Inscrit un nouvel utilisateur
      */
-    public function registerUser($email, $password) {
+    public function registerUser($email, $password)
+    {
         if (empty($email) || empty($password)) {
             throw new \InvalidArgumentException('Email et mot de passe requis');
         }
@@ -50,7 +53,7 @@ class GestionUserService implements GestionUserServiceInterface {
         // Créer le nouvel utilisateur
         $user = new User();
         $user->email = $email;
-        $user->password = password_hash($password, PASSWORD_DEFAULT);
+        $user->mot_de_passe = password_hash($password, PASSWORD_DEFAULT);
         $user->save();
 
         return $user;
@@ -59,7 +62,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Démarre une session pour un utilisateur
      */
-    public function startUserSession(User $user) {
+    public function startUserSession(User $user)
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -73,7 +77,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Récupère l'utilisateur actuellement connecté
      */
-    public function getCurrentUser() {
+    public function getCurrentUser()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -95,7 +100,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Déconnecte l'utilisateur actuel
      */
-    public function logoutUser() {
+    public function logoutUser()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -109,14 +115,16 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Vérifie si un utilisateur est authentifié
      */
-    public function isUserAuthenticated() {
+    public function isUserAuthenticated()
+    {
         return $this->getCurrentUser() !== null;
     }
 
     /**
      * Récupère un utilisateur par son ID
      */
-    public function getUserById($userId) {
+    public function getUserById($userId)
+    {
         if (empty($userId)) {
             return null;
         }
@@ -127,7 +135,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Vérifie si un utilisateur peut créer des articles
      */
-    public function canCreateArticle($userId) {
+    public function canCreateArticle($userId)
+    {
         if (!$userId) {
             return false;
         }
@@ -139,7 +148,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Vérifie si un utilisateur peut modifier un article
      */
-    public function canEditArticle($userId, $articleId) {
+    public function canEditArticle($userId, $articleId)
+    {
         if (!$userId || !$articleId) {
             return false;
         }
@@ -156,7 +166,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Vérifie si un utilisateur peut supprimer un article
      */
-    public function canDeleteArticle($userId, $articleId) {
+    public function canDeleteArticle($userId, $articleId)
+    {
         // Même logique que pour l'édition
         return $this->canEditArticle($userId, $articleId);
     }
@@ -164,7 +175,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Récupère un utilisateur par son email
      */
-    public function getUserByEmail($email) {
+    public function getUserByEmail($email)
+    {
         if (empty($email)) {
             return null;
         }
@@ -175,7 +187,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Vérifie si un email est déjà utilisé
      */
-    public function emailExists($email) {
+    public function emailExists($email)
+    {
         if (empty($email)) {
             return false;
         }
@@ -186,7 +199,8 @@ class GestionUserService implements GestionUserServiceInterface {
     /**
      * Met à jour le mot de passe d'un utilisateur
      */
-    public function updateUserPassword($userId, $newPassword) {
+    public function updateUserPassword($userId, $newPassword)
+    {
         if (empty($userId) || empty($newPassword)) {
             throw new \InvalidArgumentException('ID utilisateur et nouveau mot de passe requis');
         }
@@ -200,7 +214,7 @@ class GestionUserService implements GestionUserServiceInterface {
             throw new \Exception('Utilisateur non trouvé');
         }
 
-        $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
+        $user->mot_de_passe = password_hash($newPassword, PASSWORD_DEFAULT);
         return $user->save();
     }
 }
