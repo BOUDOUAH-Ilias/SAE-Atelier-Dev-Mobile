@@ -11,6 +11,12 @@ class CategorieService implements CategorieInterface {
         return Categorie::all()->toArray();
     }
 
+    public function createCategorie(string $nom): void {
+        $categorie = new Categorie();
+        $categorie->nom = $nom;
+        $categorie->save();
+    }
+
     public function getCategorieById(int $id): array {
         try {
             return Categorie::findOrFail($id)->toArray();
