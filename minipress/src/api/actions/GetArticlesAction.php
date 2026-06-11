@@ -25,7 +25,7 @@ public function __invoke(Request $rq, Response $rs, array $args){
                     ],
 
                     'links' => [
-                        'self' => ['href' => '/articles/' . $art['id'] . '/'],
+                        'self' => ['href' => 'api/articles/' . $art['id']],
                     ],
                 ];
             }, $articles),
