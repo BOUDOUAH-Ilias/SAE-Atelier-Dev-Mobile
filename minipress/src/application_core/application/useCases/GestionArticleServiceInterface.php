@@ -8,4 +8,9 @@ interface GestionArticleServiceInterface{
 
     public function createArticle(string $titre, ?string $resume, string $contenu, bool $publie, ?string $imageUrl, int $idCategorie, int $idAuteur): void;
 
+    public function getArticleDesc(): array;
+
+        public function getArticle(): array;
+
+
 }

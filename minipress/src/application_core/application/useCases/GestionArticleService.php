@@ -19,6 +19,12 @@ class GestionArticleService implements GestionArticleServiceInterface{
         $article->save();
     }
 
+    public function getArticleDesc(): array {
+        return Article::orderBy('date_creation', 'desc')->get()->toArray();
+    }
+
+  
+
     public function getArticles(): array {
         return Article::all()->toArray();
     }
