@@ -15,7 +15,7 @@ class ShowListArticleAction {
         $view = Twig::fromRequest($request);
         $service = new GestionArticleService();
         return $view->render($response, 'list.article.twig', [
-            'articles' => $service->getArticles()
+            'articles' => $service->getArticleDesc()
         ]);
     }
 }
