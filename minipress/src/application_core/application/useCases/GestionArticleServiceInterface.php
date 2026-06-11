@@ -10,7 +10,7 @@ interface GestionArticleServiceInterface{
 
     public function getArticleDesc(): array;
 
-    public function getArticle(): array;
+    public function getArticles(): array;
 
     public function getArticleByCategorie(int $idCategorie): array;
 
