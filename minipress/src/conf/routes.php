@@ -16,7 +16,7 @@ return function (\Slim\App $app): void {
   $app->get('/api/articles', minipress\api\actions\GetArticlesAction::class)
         ->setName('api_articles');
 
-  $app->get('/api/articles/{id}/', minipress\api\actions\GetArticleByIdAction::class)
+  $app->get('/api/articles/{id}', minipress\api\actions\GetArticleByIdAction::class)
         ->setName('api_articleById');
 
   $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
