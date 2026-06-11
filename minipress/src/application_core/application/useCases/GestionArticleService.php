@@ -21,7 +21,7 @@ class GestionArticleService implements GestionArticleServiceInterface{
     }
 
     public function getArticleDesc(): array {
-        return Article::orderBy('date_creation', 'desc')->get()->toArray();
+        return Article::with('auteur')->orderBy('date_creation', 'desc')->get();
     }
 
 
@@ -29,13 +29,12 @@ class GestionArticleService implements GestionArticleServiceInterface{
     {
         return Article::where('id_categorie', $idCategorie)
             ->orderBy('date_creation', 'desc')
-            ->get()
-            ->toArray();
+            ->get();
     }
   
 
     public function getArticles(): array {
-        return Article::all()->toArray();
+        return Article::with('auteur')->get();
     }
 
     public function getArticleById(int $id): array {

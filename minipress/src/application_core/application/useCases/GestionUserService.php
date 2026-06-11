@@ -6,7 +6,8 @@ use minipress\application_core\domain\entities\Article;
 
 class GestionUserService implements GestionUserServiceInterface {
 
-    public function authenticateUser($email, $password) {
+    public function authenticateUser($email, $password)
+    {
         if (empty($email) || empty($password)) {
             throw new \InvalidArgumentException('Email et mot de passe requis');
         }
@@ -17,10 +18,17 @@ class GestionUserService implements GestionUserServiceInterface {
             throw new \Exception('Utilisateur non trouvé');
         }
 
-        if (!password_verify($password, $user->password)) {
-            throw new \Exception('Mot de passe incorrect');
+        $hash = $user->mot_de_passe;
+
+        if (empty($hash)) {
+            throw new \Exception('Mot de passe manquant en base');
         }
 
+        if (!password_verify($password, $hash)) {
+            throw new \Exception('Email ou mot de passe incorrect');
+        }
+
+        echo password_hash("mot_de_passe", PASSWORD_DEFAULT);
         return $user;
     }
 
@@ -43,7 +51,7 @@ class GestionUserService implements GestionUserServiceInterface {
 
         $user = new User();
         $user->email = $email;
-        $user->password = password_hash($password, PASSWORD_DEFAULT);
+        $user->mot_de_passe = password_hash($password, PASSWORD_DEFAULT);
         $user->save();
 
         return $user;
@@ -157,7 +165,7 @@ class GestionUserService implements GestionUserServiceInterface {
             throw new \Exception('Utilisateur non trouvé');
         }
 
-        $user->password = password_hash($newPassword, PASSWORD_DEFAULT);
+        $user->mot_de_passe = password_hash($newPassword, PASSWORD_DEFAULT);
         return $user->save();
     }
 }

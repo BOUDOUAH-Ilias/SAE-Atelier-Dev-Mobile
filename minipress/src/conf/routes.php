@@ -36,6 +36,16 @@ return function (\Slim\App $app): void {
       
          $app->post('/categorie/create', minipress\webui\actions\CreateCategorieAction::class)
         ->setName('categorie.create.post');
+
+    $userService = new \minipress\application_core\application\useCases\GestionUserService();
+
+    $app->map(['GET', 'POST'], '/signin',
+        new \minipress\webui\actions\SignInAction($userService)
+    )->setName('signin');
+
+    $app->get('/signout',
+        new \minipress\webui\actions\SignOutAction($userService)
+    )->setName('signout');
       
 
     
