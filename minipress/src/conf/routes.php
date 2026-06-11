@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 return function (\Slim\App $app): void {
 
-  $app->get('/', minipress\webui\actions\GetHomeAction::class)
+    $app->get('/', minipress\webui\actions\GetHomeAction::class)
         ->setName('home');
 
-  $app->get('/api/categories', minipress\api\actions\GetCategoriesAction::class)
+    $app->get('/api/categories', minipress\api\actions\GetCategoriesAction::class)
         ->setName('api_categories');
 
-  $app->get('/api/categories/{id}/articles', minipress\api\actions\GetArticlesByCategorieAction::class)
+    $app->get('/api/categories/{id}/articles', minipress\api\actions\GetArticlesByCategorieAction::class)
         ->setName('api_articleByCategorie');
 
-  $app->get('/api/articles', minipress\api\actions\GetArticlesAction::class)
+    $app->get('/api/articles', minipress\api\actions\GetArticlesAction::class)
         ->setName('api_articles');
 
-  $app->get('/api/articles/{id}', minipress\api\actions\GetArticleByIdAction::class)
+    $app->get('/api/articles/{id}', minipress\api\actions\GetArticleByIdAction::class)
         ->setName('api_articleById');
 
-  $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
+    $app->get('/article/create', minipress\webui\actions\ShowCreateArticleAction::class)
         ->setName('article.create');
 
     $app->post('/article/create', minipress\webui\actions\CreateArticleAction::class)
@@ -30,13 +30,15 @@ return function (\Slim\App $app): void {
 
     $app->get('/articles/categorie/{id}', minipress\webui\actions\ShowListArticleByCategorieAction::class)
         ->setName('article.list.categorie');
-      
-      $app->get('/categorie/create', minipress\webui\actions\ShowCreateCategorieAction::class)
-        ->setName('categorie.create');
-      
-         $app->post('/categorie/create', minipress\webui\actions\CreateCategorieAction::class)
-        ->setName('categorie.create.post');
-      
 
-    
+    $app->get('/categorie/create', minipress\webui\actions\ShowCreateCategorieAction::class)
+        ->setName('categorie.create');
+
+    $app->post('/categorie/create', minipress\webui\actions\CreateCategorieAction::class)
+        ->setName('categorie.create.post');
+
+
+
+    $app->get('/api/auteurs/{id}/articles', minipress\api\actions\GetArticleByAuthorAction::class)
+        ->setName('api_articles_par_autheur');
 };
