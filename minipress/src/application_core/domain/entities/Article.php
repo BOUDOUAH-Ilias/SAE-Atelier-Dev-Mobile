@@ -8,7 +8,7 @@ class Article extends Model{
 
 
     public $table = "article";
-     public $timestamps = false;
+    public $timestamps = false;
 
 
     public const CREATED_AT = 'date_creation';

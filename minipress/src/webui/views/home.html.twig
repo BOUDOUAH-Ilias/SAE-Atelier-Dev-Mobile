@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Minipress{% endblock %}</title>
-    <link rel="stylesheet" href="{{ css_dir }}/style.css">
 </head>
 <body>
     <h1>Minipress</h1>
+    <nav>
+        <ul>
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/articles">Liste des articles</a></li>
+            <li><a href="/article/create">Créer un article</a></li>
+            <li><a href="/categorie/create">Créer une catégorie</a></li>
+        </ul>
+    </nav>
     {% block content %}
     <p>Application opérationnelle.</p>
     {% endblock %}
