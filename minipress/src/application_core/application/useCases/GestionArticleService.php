@@ -4,6 +4,7 @@
 namespace minipress\application_core\application\useCases;
 
 use minipress\application_core\domain\entities\Article;
+use Override;
 
 class GestionArticleService implements GestionArticleServiceInterface{
 
@@ -23,8 +24,14 @@ class GestionArticleService implements GestionArticleServiceInterface{
         return Article::orderBy('date_creation', 'desc')->get()->toArray();
     }
 
-     public function getArticle(): array {
+     public function getArticles(): array {
         return Article::all()->toArray();
+    }
+
+    #[Override]
+    public function getArticleByCategorie(int $idCategorie): array
+    {
+        return Article::where('id_categorie', $idCategorie)->get()->toArray();
     }
 }
 ?>
