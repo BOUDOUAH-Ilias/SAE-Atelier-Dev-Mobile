@@ -120,7 +120,7 @@ class GestionUserService implements GestionUserServiceInterface {
             return false;
         }
 
-        return $article->author_id == $userId;
+        return $article->id_auteur == $userId;
     }
 
     public function canDeleteArticle($userId, $articleId) {
