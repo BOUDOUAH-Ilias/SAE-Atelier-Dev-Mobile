@@ -139,7 +139,6 @@ h2 {
 .btn-danger  { background: var(--danger);  color: #fff; }
 .btn-success { background: var(--success); color: #fff; }
 
-/* ── Forms ── */
 form { max-width: 560px; }
 
 .form-group { margin-bottom: 16px; }

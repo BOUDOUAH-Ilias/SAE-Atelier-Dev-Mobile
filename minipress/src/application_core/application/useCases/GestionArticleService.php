@@ -41,17 +41,18 @@ class GestionArticleService implements GestionArticleServiceInterface
 
     public function getArticleDesc(): array
     {
-        return Article::orderBy('date_creation', 'desc')->where('publie', 1)->get()->toArray();
+        return Article::with('auteur')->where('publie', 1)->orderBy('date_creation', 'desc')->get()->toArray();
     }
 
     public function getAllArticles(): array
     {
-        return Article::orderBy('date_creation', 'desc')->get()->toArray();
+        return Article::with('auteur')->orderBy('date_creation', 'desc')->get()->toArray();
     }
 
     public function getArticlesForUser(int $userId): array
     {
-        return Article::where('publie', 1)
+        return Article::with('auteur')
+            ->where('publie', 1)
             ->orWhere('id_auteur', $userId)
             ->orderBy('date_creation', 'desc')
             ->get()->toArray();
@@ -59,22 +60,21 @@ class GestionArticleService implements GestionArticleServiceInterface
 
     public function getArticleAsc(): array
     {
-        return Article::orderBy('date_creation', 'asc')->where('publie', 1)->get()->toArray();
+        return Article::with('auteur')->where('publie', 1)->orderBy('date_creation', 'asc')->get()->toArray();
     }
-
 
     public function getArticleByCategorie(int $idCategorie): array
     {
-        return Article::where('id_categorie', $idCategorie)
-            ->orderBy('date_creation', 'desc')
+        return Article::with('auteur')
+            ->where('id_categorie', $idCategorie)
             ->where('publie', 1)
-            ->get()
-            ->toArray();
+            ->orderBy('date_creation', 'desc')
+            ->get()->toArray();
     }
 
     public function getArticles(): array
     {
-        return Article::where('publie', 1)->get()->toArray();
+        return Article::with('auteur')->where('publie', 1)->get()->toArray();
     }
 
     public function getArticleById(int $id): array
@@ -117,7 +117,7 @@ class GestionArticleService implements GestionArticleServiceInterface
 
     public function getArticlesDeAuteurId(int $idAuteur): array
     {
-        return Article::where('id_auteur', $idAuteur)->get()->toArray();
+        return Article::with('auteur')->where('id_auteur', $idAuteur)->orderBy('date_creation', 'desc')->get()->toArray();
     }
 
     public function updatePublie(int $articleId): void

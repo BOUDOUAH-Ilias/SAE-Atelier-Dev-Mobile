@@ -13,6 +13,7 @@
             <tr>
                 <th>Titre</th>
                 <th>Date</th>
+                <th>Auteur</th>
                 <th>Statut</th>
                 <th>Action</th>
             </tr>
@@ -22,6 +23,7 @@
             <tr class="{{ article.publie ? '' : 'unpublished' }}">
                 <td>{{ article.titre }}</td>
                 <td>{{ article.date_creation|date('d/m/Y') }}</td>
+                <td>{{ article.auteur.email ?? '—' }}</td>
                 <td>
                     <span class="badge {{ article.publie ? 'badge-published' : 'badge-draft' }}">
                         {{ article.publie ? 'Publié' : 'Brouillon' }}

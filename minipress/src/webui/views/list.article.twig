@@ -25,8 +25,9 @@
             <tr>
                 <th>Titre</th>
                 <th>Date</th>
-                <th>Statut</th>
+                <th>Auteur</th>
                 {% if current_user %}
+                    <th>Statut</th>
                     <th>Action</th>
                 {% endif %}
             </tr>
@@ -35,15 +36,16 @@
             {% for article in articles %}
             {% set is_author = current_user and article.id_auteur == current_user.id %}
             {% set is_admin  = current_user and current_user.is_admin == 1 %}
-            <tr class="{{ article.publie ? '' : 'unpublished' }}">
+            <tr class="{{ (current_user and not article.publie) ? 'unpublished' : '' }}">
                 <td>{{ article.titre }}</td>
                 <td>{{ article.date_creation|date('d/m/Y') }}</td>
+                <td>{{ article.auteur.email ?? '—' }}</td>
+                {% if current_user %}
                 <td>
                     <span class="badge {{ article.publie ? 'badge-published' : 'badge-draft' }}">
                         {{ article.publie ? 'Publié' : 'Brouillon' }}
                     </span>
                 </td>
-                {% if current_user %}
                 <td>
                     {% if is_author %}
                         <form method="post" action="{{ base_path }}/article/{{ article.id }}/publier">
