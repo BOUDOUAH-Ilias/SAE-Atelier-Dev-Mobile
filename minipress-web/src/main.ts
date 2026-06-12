@@ -2,20 +2,9 @@ import Handlebars from "handlebars";
 import { articles as ArticlesApi } from "./api/articles";
 import { categories as CategoriesApi } from "./api/categories";
 
-renderAllArticles();
-renderAllCategories();
+const articlesApi = new ArticlesApi();
 
-async function renderAllArticles() {
-  const api = new ArticlesApi();
-  const data = await api.getArticles();
-
-  const templateSource = document.getElementById("list_template")!.innerHTML;
-  const template = Handlebars.compile(templateSource);
-
-  document.getElementById("app")!.innerHTML = template({ articles: data });
-}
-
-async function renderAllCategories() {
+async function renderCategories() {
   const api = new CategoriesApi();
   const data = await api.getCategories();
 
@@ -23,5 +12,23 @@ async function renderAllCategories() {
   const templateSource = await response.text();
   const template = Handlebars.compile(templateSource);
 
-  document.getElementById("app")!.innerHTML += template({ categories: data });
+  document.getElementById("categories")!.innerHTML = template({ categories: data });
+
+  document.querySelectorAll(".category-item").forEach((item) => {
+    item.addEventListener("click", () => {
+      const id = Number((item as HTMLElement).dataset.id);
+      renderArticlesByCategory(id);
+    });
+  });
 }
+
+async function renderArticlesByCategory(categoryId: number) {
+  const data = await articlesApi.getArticlesByCategory(categoryId);
+
+  const templateSource = document.getElementById("list_template")!.innerHTML;
+  const template = Handlebars.compile(templateSource);
+
+  document.getElementById("articles")!.innerHTML = template({ articles: data });
+}
+
+renderCategories();

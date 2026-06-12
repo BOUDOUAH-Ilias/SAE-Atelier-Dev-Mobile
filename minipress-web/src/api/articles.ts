@@ -14,4 +14,10 @@ export class articles {
         )
       );
   }
+
+  async getArticlesByCategory(categoryId: number): Promise<ArticleListItem[]> {
+    return fetch(API_BASE_URL + `api/categories/${categoryId}/articles`)
+      .then((res: Response) => res.json() as Promise<ArticlesResponse>)
+      .then((data: ArticlesResponse) => data.articles);
+  }
 }
