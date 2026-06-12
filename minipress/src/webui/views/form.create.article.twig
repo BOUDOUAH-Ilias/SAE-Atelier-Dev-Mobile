@@ -6,6 +6,10 @@
 
     <h2>Créer un article</h2>
 
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
     {% if not user %}
 
         <p style="color:red;">

@@ -12,6 +12,14 @@ class CategorieService implements CategorieInterface {
     }
 
     public function createCategorie(string $nom): void {
+        $nom = trim($nom);
+        if (empty($nom)) {
+            throw new \InvalidArgumentException('Le nom de la catégorie est obligatoire');
+        }
+        if (strlen($nom) > 255) {
+            throw new \InvalidArgumentException('Le nom ne peut pas dépasser 255 caractères');
+        }
+
         $categorie = new Categorie();
         $categorie->nom = $nom;
         $categorie->save();

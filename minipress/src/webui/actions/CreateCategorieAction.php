@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use minipress\application_core\application\useCases\CategorieService;
 use minipress\application_core\application\useCases\GestionUserService;
 use minipress\conf\CsrfHelper;
+use Slim\Views\Twig;
 
 class CreateCategorieAction{
 
@@ -26,11 +27,17 @@ class CreateCategorieAction{
             return $response->withStatus(403);
         }
 
-        $service = new CategorieService();
-        $service->createCategorie(
-            nom: $data['nom'],
-        );
+        try {
+            $service = new CategorieService();
+            $service->createCategorie(nom: $data['nom'] ?? '');
 
-        return $response->withHeader('Location', '/')->withStatus(302);
+            return $response->withHeader('Location', '/')->withStatus(302);
+
+        } catch (\InvalidArgumentException $e) {
+            $view = Twig::fromRequest($request);
+            return $view->render($response, 'form.create.categorie.twig', [
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }

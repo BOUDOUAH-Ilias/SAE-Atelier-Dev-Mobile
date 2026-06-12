@@ -12,12 +12,28 @@ class GestionArticleService implements GestionArticleServiceInterface
 
     public function createArticle(string $titre, ?string $resume, string $contenu, bool $publie, ?string $imageUrl, int $idCategorie, int $idAuteur): void
     {
+        if (empty(trim($titre))) {
+            throw new \InvalidArgumentException('Le titre est obligatoire');
+        }
+        if (strlen($titre) > 255) {
+            throw new \InvalidArgumentException('Le titre ne peut pas dépasser 255 caractères');
+        }
+        if (empty(trim($contenu))) {
+            throw new \InvalidArgumentException('Le contenu est obligatoire');
+        }
+        if ($idCategorie <= 0) {
+            throw new \InvalidArgumentException('Veuillez choisir une catégorie valide');
+        }
+        if ($imageUrl !== null && $imageUrl !== '' && !filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+            throw new \InvalidArgumentException("L'URL de l'image est invalide");
+        }
+
         $article = new Article();
-        $article->titre = $titre;
-        $article->resume = $resume;
-        $article->contenu = $contenu;
+        $article->titre = trim($titre);
+        $article->resume = $resume !== null ? trim($resume) : null;
+        $article->contenu = trim($contenu);
         $article->publie = $publie;
-        $article->image_url = $imageUrl;
+        $article->image_url = ($imageUrl !== '' ? $imageUrl : null);
         $article->id_categorie = $idCategorie;
         $article->id_auteur = $idAuteur;
         $article->save();
