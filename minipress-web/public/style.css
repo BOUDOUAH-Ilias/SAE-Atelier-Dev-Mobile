@@ -107,7 +107,8 @@ hr { border: none; border-top: 1px solid #ddd; margin: 16px 0; }
 
 .article-img {
     display: block;
-    max-width: 100%;
+    max-width: 400px;
+    width: 100%;
     margin: 12px 0;
     border: 1px solid #ddd;
 }
