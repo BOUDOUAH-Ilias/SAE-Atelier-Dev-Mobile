@@ -39,6 +39,14 @@ async function loadCategories(): Promise<void> {
   }
 }
 
+async function loadAllArticles(): Promise<void> {
+  try {
+    displayArticles(await articlesApi.getArticles());
+  } catch (e) {
+    renderer.renderError("Impossible de charger les articles.");
+  }
+}
+
 async function loadArticlesByCategory(categoryId: number): Promise<void> {
   try {
     displayArticles(await articlesApi.getArticlesByCategory(categoryId));
@@ -56,6 +64,7 @@ async function loadArticlesByAuthor(authorId: number): Promise<void> {
 }
 
 document.getElementById("filter-input")!.addEventListener("input", applyFilter);
+document.getElementById("btn-all-articles")!.addEventListener("click", loadAllArticles);
 
 document.getElementById("articles")!.addEventListener("click", (e: MouseEvent) => {
   const link = (e.target as HTMLElement).closest(".author-link");
@@ -66,3 +75,4 @@ document.getElementById("articles")!.addEventListener("click", (e: MouseEvent) =
 });
 
 loadCategories();
+loadAllArticles();
