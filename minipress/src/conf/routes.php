@@ -60,4 +60,9 @@ return function (\Slim\App $app): void {
         new \minipress\webui\actions\SignOutAction($userService)
     )->setName('signout');
 
+    $app->get('/maliste', minipress\webui\actions\GetMaListeAction::class)
+        ->setName('maliste');
+
+    $app->post('/article/{id}/publier', minipress\webui\actions\PublierArticleAction::class)
+        ->setName('article.publier');
 };
