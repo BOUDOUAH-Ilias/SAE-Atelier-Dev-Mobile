@@ -15,7 +15,7 @@ class CreateUserAction
         $userService = new GestionUserService();
 
         $currentUser = $userService->getCurrentUser();
-        if (!$currentUser || $currentUser->role !== 'admin') {
+        if (!$currentUser || $currentUser->is_admin !== 1) {
             return $response->withHeader('Location', '/')->withStatus(302);
         }
 
