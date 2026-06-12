@@ -14,13 +14,14 @@
   <li class="article-item">
     <h2>{{this.article.titre}}</h2>
     <p class="article-date">{{this.article.date_creation}}</p>
-    <p class="article-author">Auteur #{{this.article.auteur}}</p>
+<a class="author-link" data-id="{{this.article.auteur}}" href="#"> Auteur #{{this.article.auteur}}</a>
   </li>
   {{/each}}
 </ul>
     </script>
 
     <div id="categories"></div>
+    <hr>
     <div id="articles"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

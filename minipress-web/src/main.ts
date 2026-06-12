@@ -31,4 +31,21 @@ async function renderArticlesByCategory(categoryId: number) {
   document.getElementById("articles")!.innerHTML = template({ articles: data });
 }
 
+document.getElementById("articles")!.addEventListener("click", (e) => {
+  const link = (e.target as HTMLElement).closest(".author-link");
+  if (!link) return;
+  e.preventDefault();
+  const id = Number((link as HTMLElement).dataset.id);
+  renderArticlesByAuthor(id);
+});
+
+async function renderArticlesByAuthor(authorId: number) {
+  const data = await articlesApi.getArticlesByAuthor(authorId);
+  const template = Handlebars.compile(document.getElementById("list_template")!.innerHTML);
+  document.getElementById("articles")!.innerHTML = template({ articles: data });
+}
+
+
+
+
 renderCategories();
