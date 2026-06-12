@@ -19,6 +19,8 @@ class ShowCreateUserAction
             return $response->withHeader('Location', '/')->withStatus(302);
         }
 
-        return $view->render($response, 'creerUser.twig');
+        return $view->render($response, 'creerUser.twig', [
+            'current_user' => $currentUser,
+        ]);
     }
 }

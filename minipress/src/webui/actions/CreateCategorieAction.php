@@ -36,7 +36,8 @@ class CreateCategorieAction{
         } catch (\InvalidArgumentException $e) {
             $view = Twig::fromRequest($request);
             return $view->render($response, 'form.create.categorie.twig', [
-                'error' => $e->getMessage(),
+                'error'        => $e->getMessage(),
+                'current_user' => $currentUser,
             ]);
         }
     }

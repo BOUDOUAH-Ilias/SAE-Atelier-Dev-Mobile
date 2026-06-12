@@ -10,7 +10,7 @@
         <p style="color:red;">{{ error }}</p>
     {% endif %}
 
-    {% if not user %}
+    {% if not current_user %}
 
         <p style="color:red;">
             Vous devez être connecté pour créer un article.

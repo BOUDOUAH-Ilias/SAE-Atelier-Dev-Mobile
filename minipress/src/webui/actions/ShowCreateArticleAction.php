@@ -25,8 +25,8 @@ class ShowCreateArticleAction{
         }
         $service = new CategorieService();
         return $view->render($response, 'form.create.article.twig', [
-            'categories' => $service->getCategories(),
-            'user' => $user
+            'categories'   => $service->getCategories(),
+            'current_user' => $user,
         ]);
     }
 }

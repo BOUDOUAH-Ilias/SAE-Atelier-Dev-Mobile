@@ -21,6 +21,8 @@ class ShowCreateCategorieAction{
         }
 
         $view = Twig::fromRequest($request);
-        return $view->render($response, 'form.create.categorie.twig');
+        return $view->render($response, 'form.create.categorie.twig', [
+            'current_user' => $currentUser,
+        ]);
     }
 }

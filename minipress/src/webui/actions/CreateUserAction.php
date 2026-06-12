@@ -41,8 +41,9 @@ class CreateUserAction
         }
 
         return $view->render($response, 'creerUser.twig', [
-            'error' => $error,
-            'success' => $success
+            'error'        => $error,
+            'success'      => $success,
+            'current_user' => $currentUser,
         ]);
     }
 }

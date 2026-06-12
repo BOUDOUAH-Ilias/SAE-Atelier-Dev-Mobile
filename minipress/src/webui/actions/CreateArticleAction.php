@@ -47,9 +47,9 @@ class CreateArticleAction {
             $view = Twig::fromRequest($request);
             $categories = (new CategorieService())->getCategories();
             return $view->render($response, 'form.create.article.twig', [
-                'error' => $e->getMessage(),
-                'categories' => $categories,
-                'user' => $user,
+                'error'        => $e->getMessage(),
+                'categories'   => $categories,
+                'current_user' => $user,
             ]);
         }
     }
