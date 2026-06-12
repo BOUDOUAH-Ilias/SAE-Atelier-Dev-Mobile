@@ -5,6 +5,18 @@
 {% block content %}
 <h2>Articles</h2>
 
+{% if categories is not empty %}
+<div class="cat-filter">
+    <a href="{{ base_path }}/articles" class="cat-filter-item {{ active_cat is null ? 'active' : '' }}">Tous</a>
+    {% for cat in categories %}
+        <a href="{{ base_path }}/articles/categorie/{{ cat.id }}"
+           class="cat-filter-item {{ active_cat == cat.id ? 'active' : '' }}">
+            {{ cat.nom }}
+        </a>
+    {% endfor %}
+</div>
+{% endif %}
+
 {% if articles is empty %}
     <p>Aucun article pour le moment.</p>
 {% else %}

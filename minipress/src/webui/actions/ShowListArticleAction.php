@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use minipress\application_core\application\useCases\GestionArticleService;
 use minipress\application_core\application\useCases\GestionUserService;
+use minipress\application_core\application\useCases\CategorieService;
 
 class ShowListArticleAction
 {
@@ -27,8 +28,10 @@ class ShowListArticleAction
         }
 
         return $view->render($response, 'list.article.twig', [
-            'articles' => $articles,
+            'articles'     => $articles,
             'current_user' => $currentUser,
+            'categories'   => (new CategorieService())->getCategories(),
+            'active_cat'   => null,
         ]);
     }
 }
