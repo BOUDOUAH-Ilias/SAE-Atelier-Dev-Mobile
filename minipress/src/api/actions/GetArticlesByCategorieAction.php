@@ -28,7 +28,7 @@ class GetArticlesByCategorieAction
                     ],
 
                     'links' => [
-                        'self' => ['href' => '/articles/' . $art['id'] . '/'],
+                        'self' => ['href' => 'api/articles/' . $art['id']],
                     ],
                 ];
             }, $articles),
