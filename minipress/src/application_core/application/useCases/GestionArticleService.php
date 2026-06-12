@@ -23,14 +23,23 @@ class GestionArticleService implements GestionArticleServiceInterface
         $article->save();
     }
 
+<<<<<<< HEAD
     public function getArticleDesc(): array
     {
+<<<<<<< HEAD
+        return Article::orderBy('date_creation', 'desc')->get()->toArray();
+=======
+    public function getArticleDesc(): array {
+        return Article::with('auteur')->orderBy('date_creation', 'desc')->get();
+>>>>>>> maxence
+=======
         return Article::orderBy('date_creation', 'desc')->where('publie', 1)->get()->toArray();
     }
 
     public function getArticleAsc(): array
     {
         return Article::orderBy('date_creation', 'asc')->where('publie', 1)->get()->toArray();
+>>>>>>> 6b32529cd9ffe449d9b4d7df58d83a95b2c1ad61
     }
 
 
@@ -38,15 +47,28 @@ class GestionArticleService implements GestionArticleServiceInterface
     {
         return Article::where('id_categorie', $idCategorie)
             ->orderBy('date_creation', 'desc')
+<<<<<<< HEAD
+            ->get();
+=======
             ->where('publie', 1)
             ->get()
             ->toArray();
+>>>>>>> 6b32529cd9ffe449d9b4d7df58d83a95b2c1ad61
     }
 
+<<<<<<< HEAD
 
     public function getArticles(): array
     {
+<<<<<<< HEAD
+        return Article::all()->toArray();
+=======
+    public function getArticles(): array {
+        return Article::with('auteur')->get();
+>>>>>>> maxence
+=======
         return Article::where('publie', 1)->get()->toArray();
+>>>>>>> 6b32529cd9ffe449d9b4d7df58d83a95b2c1ad61
     }
 
     public function getArticleById(int $id): array

@@ -3,47 +3,61 @@
 {% block title %}Nouvel article – Minipress{% endblock %}
 
 {% block content %}
-<h2>Créer un article</h2>
 
-<form method="post" action="{{ base_path }}/article/create">
+    <h2>Créer un article</h2>
 
-    <div>
-        <label for="titre">Titre *</label><br>
-        <input type="text" id="titre" name="titre" required maxlength="255">
-    </div><br>
+    {% if not user %}
 
-    <div>
-        <label for="resume">Résumé</label><br>
-        <textarea id="resume" name="resume" rows="3" cols="60"></textarea>
-    </div><br>
+        <p style="color:red;">
+            Vous devez être connecté pour créer un article.
+        </p>
 
-    <div>
-        <label for="contenu">Contenu *</label><br>
-        <textarea id="contenu" name="contenu" required rows="8" cols="60"></textarea>
-    </div><br>
+        <a href="{{ base_path }}/signin">Se connecter</a>
 
-    <div>
-        <label for="id_categorie">Catégorie *</label><br>
-        <select id="id_categorie" name="id_categorie" required>
-            <option value="">-- Choisir --</option>
-            {% for categorie in categories %}
-                <option value="{{ categorie.id }}">{{ categorie.nom }}</option>
-            {% endfor %}
-        </select>
-    </div><br> 
+    {% else %}
 
-    <div>
-        <label for="image_url">URL de l'image</label><br>
-        <input type="url" id="image_url" name="image_url" maxlength="500">
-    </div><br>
+        <form method="post" action="{{ base_path }}/article/create">
 
-    <div>
-        <input type="checkbox" id="publie" name="publie" value="1">
-        <label for="publie">Publier immédiatement</label>
-    </div><br>
+            <div>
+                <label for="titre">Titre *</label><br>
+                <input type="text" id="titre" name="titre" required maxlength="255">
+            </div><br>
 
-    <button type="submit">Créer l'article</button>
-    <a href="{{ base_path }}/">Annuler</a>
+            <div>
+                <label for="resume">Résumé</label><br>
+                <textarea id="resume" name="resume" rows="3" cols="60"></textarea>
+            </div><br>
 
-</form>
+            <div>
+                <label for="contenu">Contenu *</label><br>
+                <textarea id="contenu" name="contenu" required rows="8" cols="60"></textarea>
+            </div><br>
+
+            <div>
+                <label for="id_categorie">Catégorie *</label><br>
+                <select id="id_categorie" name="id_categorie" required>
+                    <option value="">-- Choisir --</option>
+                    {% for categorie in categories %}
+                        <option value="{{ categorie.id }}">{{ categorie.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div><br>
+
+            <div>
+                <label for="image_url">URL de l'image</label><br>
+                <input type="url" id="image_url" name="image_url" maxlength="500">
+            </div><br>
+
+            <div>
+                <input type="checkbox" id="publie" name="publie" value="1">
+                <label for="publie">Publier immédiatement</label>
+            </div><br>
+
+            <button type="submit">Créer l'article</button>
+            <a href="{{ base_path }}/">Annuler</a>
+
+        </form>
+
+    {% endif %}
+
 {% endblock %}
