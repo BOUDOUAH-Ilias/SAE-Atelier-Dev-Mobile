@@ -19,7 +19,7 @@ class SignInAction {
         $view = Twig::fromRequest($request);
 
         if ($request->getMethod() === 'GET') {
-            return $view->render($response, 'signin.twig');
+            return $view->render($response, 'signIn.twig');
         }
 
         $data = $request->getParsedBody();
@@ -35,7 +35,7 @@ class SignInAction {
             return $response->withHeader('Location', '/')->withStatus(302);
 
         } catch (\Exception $e) {
-            return $view->render($response, 'signin.twig', [
+            return $view->render($response, 'signIn.twig', [
                 'error' => $e->getMessage()
             ]);
         }
