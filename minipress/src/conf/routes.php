@@ -46,4 +46,6 @@ return function (\Slim\App $app): void {
 
     $app->post('/admin/user/create', minipress\webui\actions\CreateUserAction::class)
         ->setName('user.create.post');
+
+
 };

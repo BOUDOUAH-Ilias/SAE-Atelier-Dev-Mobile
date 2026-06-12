@@ -9,9 +9,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use minipress\application_core\application\useCases\GestionArticleService;
 
-class ShowListArticleAction {
+class ShowListArticleAction
+{
 
-    public function __invoke(Request $request, Response $response): Response {
+    public function __invoke(Request $request, Response $response): Response
+    {
         $view = Twig::fromRequest($request);
         $service = new GestionArticleService();
         return $view->render($response, 'list.article.twig', [
