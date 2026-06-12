@@ -3,6 +3,16 @@ export interface Category {
   nom: string;
 }
 
+export interface CategoryItem {
+  categorie: Category;
+}
+
+export interface CategoriesResponse {
+  type: string;
+  count: number;
+  categories: CategoryItem[];
+}
+
 export interface Article {
   id: number;
   titre: string;
