@@ -6,6 +6,7 @@ namespace minipress\api\actions;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use minipress\application_core\application\useCases\GestionArticleService;
+use minipress\application_core\application\exceptions\EntityNotFoundException;
 
 class GetArticleByIdAction
 {
@@ -14,30 +15,34 @@ class GetArticleByIdAction
     {
         $id = intval($args['id']);
         $service = new GestionArticleService();
-        $art = $service->getArticleById($id);
+
+        try {
+            $art = $service->getArticleById($id);
+        } catch (EntityNotFoundException $e) {
+            $rs->getBody()->write(json_encode(
+                ['error' => 'Article introuvable'],
+                JSON_UNESCAPED_UNICODE
+            ));
+            return $rs->withHeader('Content-Type', 'application/json')->withStatus(404);
+        }
 
         $data = [
-            'type' => 'collection',
-            'articles' =>
-                [
-                    'article' => [
-                        'id' => $id,
-                        'titre' => $art['titre'],
-                        'resume' => $art['resume'],
-                        'contenu' => $art['contenu'],
-                        'date_creation' => $art['date_creation'],
-                        'publie' => $art['publie'],
-                        'image_url' => $art['image_url'],
-                        'categorie' => $art['id_categorie'],
-                        'auteur' => $art['id_auteur'],
-                    ],
-
-
-                ]
+            'type' => 'resource',
+            'article' => [
+                'id' => $id,
+                'titre' => $art['titre'],
+                'resume' => $art['resume'],
+                'contenu' => $art['contenu'],
+                'date_creation' => $art['date_creation'],
+                'publie' => $art['publie'],
+                'image_url' => $art['image_url'],
+                'categorie' => $art['id_categorie'],
+                'auteur' => $art['id_auteur'],
+            ],
         ];
 
         $rs->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
-        return $rs->withHeader('Content-Type', 'application/json');
+        return $rs->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 }

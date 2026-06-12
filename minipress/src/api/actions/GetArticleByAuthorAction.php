@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace minipress\api\actions;
 
-use minipress\core\exceptions\EntityNotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use minipress\application_core\application\useCases\GestionArticleService;
