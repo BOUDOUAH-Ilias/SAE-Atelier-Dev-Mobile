@@ -7,6 +7,17 @@ export interface CategoryItem {
   categorie: Category;
 }
 
+export interface AuthorArticleItem {
+  titre: string;
+  date_creation: string;
+  auteur: { id: number; nom: string } | null;
+  url: string;
+}
+export interface AuthorArticlesResponse {
+  type: string;
+  articles: AuthorArticleItem[];
+}
+
 export interface CategoriesResponse {
   type: string;
   count: number;

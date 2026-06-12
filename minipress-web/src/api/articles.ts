@@ -1,4 +1,4 @@
-import type { ArticleListItem, ArticlesResponse } from "../type";
+import type { ArticleListItem, ArticlesResponse, AuthorArticlesResponse } from "../type";
 import { API_BASE_URL } from "../conf/conf";
 
 export class articles {
@@ -20,4 +20,15 @@ export class articles {
       .then((res: Response) => res.json() as Promise<ArticlesResponse>)
       .then((data: ArticlesResponse) => data.articles);
   }
+
+  async getArticlesByAuthor(authorId: number): Promise<ArticleListItem[]> {
+  return fetch(API_BASE_URL + `api/auteurs/${authorId}/articles`)
+    .then((res) => res.json() as Promise<AuthorArticlesResponse>)
+    .then((data) =>
+      data.articles.map((a) => ({
+        article: { titre: a.titre, date_creation: a.date_creation, auteur: authorId },
+        links: { self: { href: a.url } },
+      }))
+    );
+}
 }
