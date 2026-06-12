@@ -59,6 +59,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `email`, `mot_de_passe`, `is_admin`) VALUES
 (1,	'alice@minipress.fr',	'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uHxL9BkDu',	1),
-(2,	'bob@minipress.fr',	'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uHxL9BkDu',	0);
+(2,	'bob@minipress.fr',	'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uHxL9BkDu',	0),
+(100,	'maxence@gmail.com',	'$2y$12$Ji1eoQed08KbiRuAEbSlreOqGZCW4poakoUD.snqgfKd9sHx0jWlW',	1),
+(101,	'hugo@mail.com',	'$2y$12$VyR31OrN1LR9DAXWCio8PuXvtaplLv7MrAYPZHLs10EYyv/vm20mW',	0);
 
 -- 2026-06-09 19:27:42 UTC
