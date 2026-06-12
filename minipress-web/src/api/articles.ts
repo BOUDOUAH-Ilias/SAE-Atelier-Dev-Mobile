@@ -1,34 +1,37 @@
 import type { ArticleListItem, ArticlesResponse, AuthorArticlesResponse } from "../type";
-import { API_BASE_URL } from "../conf/conf";
 
-export class articles {
+export class Articles {
+  private readonly baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
 
   async getArticles(): Promise<ArticleListItem[]> {
-    return fetch(API_BASE_URL + "api/articles")
-      .then((res: Response) => res.json() as Promise<ArticlesResponse>)
-      .then((data: ArticlesResponse) =>
-        data.articles.sort(
-          (a, b) =>
-            new Date(b.article.date_creation).getTime() -
-            new Date(a.article.date_creation).getTime()
-        )
-      );
+    const res = await fetch(`${this.baseUrl}api/articles`);
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+    const data: ArticlesResponse = await res.json();
+    return data.articles.sort(
+      (a, b) =>
+        new Date(b.article.date_creation).getTime() -
+        new Date(a.article.date_creation).getTime()
+    );
   }
 
   async getArticlesByCategory(categoryId: number): Promise<ArticleListItem[]> {
-    return fetch(API_BASE_URL + `api/categories/${categoryId}/articles`)
-      .then((res: Response) => res.json() as Promise<ArticlesResponse>)
-      .then((data: ArticlesResponse) => data.articles);
+    const res = await fetch(`${this.baseUrl}api/categories/${categoryId}/articles`);
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+    const data: ArticlesResponse = await res.json();
+    return data.articles;
   }
 
   async getArticlesByAuthor(authorId: number): Promise<ArticleListItem[]> {
-  return fetch(API_BASE_URL + `api/auteurs/${authorId}/articles`)
-    .then((res) => res.json() as Promise<AuthorArticlesResponse>)
-    .then((data) =>
-      data.articles.map((a) => ({
-        article: { titre: a.titre, date_creation: a.date_creation, auteur: authorId },
-        links: { self: { href: a.url } },
-      }))
-    );
-}
+    const res = await fetch(`${this.baseUrl}api/auteurs/${authorId}/articles`);
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+    const data: AuthorArticlesResponse = await res.json();
+    return data.articles.map((a) => ({
+      article: { titre: a.titre, date_creation: a.date_creation, auteur: authorId },
+      links: { self: { href: a.url } },
+    }));
+  }
 }

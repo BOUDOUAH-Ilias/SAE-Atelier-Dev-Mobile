@@ -8,16 +8,27 @@
   </head>
   <body>
 
+    <script id="categories_template" type="text/x-handlebars-template">
+      <ul class="categories-list">
+        <h1>Liste Catégories</h1>
+        {{#each categories}}
+          <li class="category-item" data-id="{{this.categorie.id}}">
+            <h2>{{this.categorie.nom}}</h2>
+          </li>
+        {{/each}}
+      </ul>
+    </script>
+
     <script id="list_template" type="text/x-handlebars-template">
       <ul class="article-list">
-  {{#each articles}}
-  <li class="article-item">
-    <h2>{{this.article.titre}}</h2>
-    <p class="article-date">{{this.article.date_creation}}</p>
-<a class="author-link" data-id="{{this.article.auteur}}" href="#"> Auteur #{{this.article.auteur}}</a>
-  </li>
-  {{/each}}
-</ul>
+        {{#each articles}}
+          <li class="article-item">
+            <h2>{{this.article.titre}}</h2>
+            <p class="article-date">{{this.article.date_creation}}</p>
+            <a class="author-link" data-id="{{this.article.auteur}}" href="#">Auteur #{{this.article.auteur}}</a>
+          </li>
+        {{/each}}
+      </ul>
     </script>
 
     <div id="categories"></div>

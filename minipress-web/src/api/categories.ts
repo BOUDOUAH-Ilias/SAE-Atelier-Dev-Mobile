@@ -1,14 +1,16 @@
 import type { CategoryItem, CategoriesResponse } from "../type";
-import { API_BASE_URL } from "../conf/conf";
 
-export class categories {
+export class Categories {
+  private readonly baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
   async getCategories(): Promise<CategoryItem[]> {
-    return fetch(API_BASE_URL + "api/categories")
-      .then((res: Response) => {
-        return res.json() as Promise<CategoriesResponse>;
-      })
-      .then((data: CategoriesResponse) => {
-        return data.categories;
-      });
+    const res = await fetch(`${this.baseUrl}api/categories`);
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+    const data: CategoriesResponse = await res.json();
+    return data.categories;
   }
 }

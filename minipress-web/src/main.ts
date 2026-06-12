@@ -1,60 +1,68 @@
-import Handlebars from "handlebars";
 import type { ArticleListItem } from "./type";
-import { articles as ArticlesApi } from "./api/articles";
-import { categories as CategoriesApi } from "./api/categories";
+import { Articles } from "./api/articles";
+import { Categories } from "./api/categories";
+import { Renderer } from "./ui/renderer";
+import { API_BASE_URL } from "./conf/conf";
 
-const articlesApi = new ArticlesApi();
+const articlesApi = new Articles(API_BASE_URL);
+const categoriesApi = new Categories(API_BASE_URL);
+const renderer = new Renderer();
+
 let currentArticles: ArticleListItem[] = [];
 
-function renderArticles(data: ArticleListItem[]) {
-  currentArticles = data;
+function displayArticles(articles: ArticleListItem[]): void {
+  currentArticles = articles;
   applyFilter();
 }
 
-function applyFilter() {
-  const keyword = (document.getElementById("filter-input") as HTMLInputElement).value.trim().toLowerCase();
-  const filtered = keyword
+function applyFilter(): void {
+  const keyword = (document.getElementById("filter-input") as HTMLInputElement)
+    .value.trim().toLowerCase();
+  const filtered: ArticleListItem[] = keyword
     ? currentArticles.filter((a) => a.article.titre.toLowerCase().includes(keyword))
     : currentArticles;
+  renderer.renderArticles(filtered);
+}
 
-  const template = Handlebars.compile(document.getElementById("list_template")!.innerHTML);
-  document.getElementById("articles")!.innerHTML = template({ articles: filtered });
+async function loadCategories(): Promise<void> {
+  try {
+    const categories = await categoriesApi.getCategories();
+    renderer.renderCategories(categories);
+    document.querySelectorAll(".category-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const id = Number((item as HTMLElement).dataset.id);
+        loadArticlesByCategory(id);
+      });
+    });
+  } catch (e) {
+    renderer.renderError("Impossible de charger les catégories.");
+  }
+}
+
+async function loadArticlesByCategory(categoryId: number): Promise<void> {
+  try {
+    displayArticles(await articlesApi.getArticlesByCategory(categoryId));
+  } catch (e) {
+    renderer.renderError("Impossible de charger les articles de cette catégorie.");
+  }
+}
+
+async function loadArticlesByAuthor(authorId: number): Promise<void> {
+  try {
+    displayArticles(await articlesApi.getArticlesByAuthor(authorId));
+  } catch (e) {
+    renderer.renderError("Impossible de charger les articles de cet auteur.");
+  }
 }
 
 document.getElementById("filter-input")!.addEventListener("input", applyFilter);
 
-async function renderCategories() {
-  const api = new CategoriesApi();
-  const data = await api.getCategories();
-
-  const response = await fetch("/templates/categories-list.hbs");
-  const templateSource = await response.text();
-  const template = Handlebars.compile(templateSource);
-
-  document.getElementById("categories")!.innerHTML = template({ categories: data });
-
-  document.querySelectorAll(".category-item").forEach((item) => {
-    item.addEventListener("click", () => {
-      const id = Number((item as HTMLElement).dataset.id);
-      renderArticlesByCategory(id);
-    });
-  });
-}
-
-async function renderArticlesByCategory(categoryId: number) {
-  renderArticles(await articlesApi.getArticlesByCategory(categoryId));
-}
-
-document.getElementById("articles")!.addEventListener("click", (e) => {
+document.getElementById("articles")!.addEventListener("click", (e: MouseEvent) => {
   const link = (e.target as HTMLElement).closest(".author-link");
   if (!link) return;
   e.preventDefault();
   const id = Number((link as HTMLElement).dataset.id);
-  renderArticlesByAuthor(id);
+  loadArticlesByAuthor(id);
 });
 
-async function renderArticlesByAuthor(authorId: number) {
-  renderArticles(await articlesApi.getArticlesByAuthor(authorId));
-}
-
-renderCategories();
+loadCategories();
