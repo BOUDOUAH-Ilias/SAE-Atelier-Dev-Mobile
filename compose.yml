@@ -14,6 +14,12 @@ services:
       - "3307:3306"
     networks:
       - minipress.net
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   adminer:
     image: adminer:5
@@ -37,7 +43,8 @@ services:
     networks:
       - minipress.net
     depends_on:
-      - sql
+      sql:
+        condition: service_healthy
 
   minipress.api:
     image: operrin/php:8.5.4
@@ -52,7 +59,8 @@ services:
     networks:
       - minipress.net
     depends_on:
-      - sql
+      sql:
+        condition: service_healthy
 
   minipress.web:
     image: node:22-alpine
