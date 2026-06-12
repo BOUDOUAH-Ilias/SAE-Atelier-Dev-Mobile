@@ -1,0 +1,38 @@
+{% extends "home.html.twig" %}
+
+{% block title %}Liste des articles – Minipress{% endblock %}
+
+{% block content %}
+<h2>Mes articles</h2>
+
+{% if articles is empty %}
+    <p>Aucun article pour le moment.</p>
+{% else %}
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Date de création</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article.titre }}</td>
+                <td>{{ article.date_creation|date('d/m/Y H:i') }}</td>
+                <td>{{ article.publie ? 'Publié' : 'Non publié' }}</td>
+                <td>
+                    <form method="post" action="/article/{{ article.id }}/publier">
+                        <button type="submit">
+                            {{ article.publie ? 'Dépublier' : 'Publier' }}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

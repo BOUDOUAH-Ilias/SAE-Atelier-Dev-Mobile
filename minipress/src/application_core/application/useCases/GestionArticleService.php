@@ -86,5 +86,21 @@ class GestionArticleService implements GestionArticleServiceInterface
         return $query->get()->toArray();
     }
 
+    public function getArticlesDeAuteurId(int $idAuteur): array
+    {
+        return Article::where('id_auteur', $idAuteur)->get()->toArray();
+    }
+
+    public function updatePublie(int $articleId): void
+    {
+        $article = Article::find($articleId);
+
+        if (!$article) {
+            throw new EntityNotFoundException("Article", $articleId);
+        }
+
+        $article->publie = $article->publie ? 0 : 1;
+        $article->save();
+    }
 }
 
