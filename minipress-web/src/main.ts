@@ -1,8 +1,27 @@
 import Handlebars from "handlebars";
+import type { ArticleListItem } from "./type";
 import { articles as ArticlesApi } from "./api/articles";
 import { categories as CategoriesApi } from "./api/categories";
 
 const articlesApi = new ArticlesApi();
+let currentArticles: ArticleListItem[] = [];
+
+function renderArticles(data: ArticleListItem[]) {
+  currentArticles = data;
+  applyFilter();
+}
+
+function applyFilter() {
+  const keyword = (document.getElementById("filter-input") as HTMLInputElement).value.trim().toLowerCase();
+  const filtered = keyword
+    ? currentArticles.filter((a) => a.article.titre.toLowerCase().includes(keyword))
+    : currentArticles;
+
+  const template = Handlebars.compile(document.getElementById("list_template")!.innerHTML);
+  document.getElementById("articles")!.innerHTML = template({ articles: filtered });
+}
+
+document.getElementById("filter-input")!.addEventListener("input", applyFilter);
 
 async function renderCategories() {
   const api = new CategoriesApi();
@@ -23,12 +42,7 @@ async function renderCategories() {
 }
 
 async function renderArticlesByCategory(categoryId: number) {
-  const data = await articlesApi.getArticlesByCategory(categoryId);
-
-  const templateSource = document.getElementById("list_template")!.innerHTML;
-  const template = Handlebars.compile(templateSource);
-
-  document.getElementById("articles")!.innerHTML = template({ articles: data });
+  renderArticles(await articlesApi.getArticlesByCategory(categoryId));
 }
 
 document.getElementById("articles")!.addEventListener("click", (e) => {
@@ -40,12 +54,7 @@ document.getElementById("articles")!.addEventListener("click", (e) => {
 });
 
 async function renderArticlesByAuthor(authorId: number) {
-  const data = await articlesApi.getArticlesByAuthor(authorId);
-  const template = Handlebars.compile(document.getElementById("list_template")!.innerHTML);
-  document.getElementById("articles")!.innerHTML = template({ articles: data });
+  renderArticles(await articlesApi.getArticlesByAuthor(authorId));
 }
-
-
-
 
 renderCategories();
