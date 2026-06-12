@@ -1,5 +1,5 @@
 import Handlebars from "handlebars";
-import type { ArticleListItem, CategoryItem } from "../type";
+import type { ArticleDetail, ArticleListItem, CategoryItem } from "../type";
 
 export class Renderer {
   private getTemplate(id: string): HandlebarsTemplateDelegate {
@@ -15,6 +15,29 @@ export class Renderer {
   renderArticles(articles: ArticleListItem[]): void {
     const template = this.getTemplate("list_template");
     document.getElementById("articles")!.innerHTML = template({ articles });
+  }
+
+  renderArticle(article: ArticleDetail): void {
+    const esc = (s: string) =>
+      s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    const img = article.image_url
+      ? `<img class="article-img" src="${esc(article.image_url)}" alt="">`
+      : "";
+    const resume = article.resume
+      ? `<p class="article-resume">${esc(article.resume)}</p>`
+      : "";
+
+    document.getElementById("articles")!.innerHTML = `
+      <button id="btn-back">← Retour</button>
+      <article class="article-detail">
+        <h1>${esc(article.titre)}</h1>
+        <p class="article-date">${esc(article.date_creation)}</p>
+        ${img}
+        ${resume}
+        <div class="article-content">${esc(article.contenu)}</div>
+      </article>
+    `;
   }
 
   renderError(message: string): void {

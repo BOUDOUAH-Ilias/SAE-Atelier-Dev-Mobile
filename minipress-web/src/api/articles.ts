@@ -1,4 +1,4 @@
-import type { ArticleListItem, ArticlesResponse, AuthorArticlesResponse } from "../type";
+import type { ArticleListItem, ArticleDetail, ArticlesResponse, AuthorArticlesResponse } from "../type";
 
 export class Articles {
   private readonly baseUrl: string;
@@ -23,6 +23,13 @@ export class Articles {
     if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
     const data: ArticlesResponse = await res.json();
     return data.articles;
+  }
+
+  async getArticle(href: string): Promise<ArticleDetail> {
+    const res = await fetch(`${this.baseUrl}${href}`);
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+    const data = await res.json();
+    return data.article as ArticleDetail;
   }
 
   async getArticlesByAuthor(authorId: number): Promise<ArticleListItem[]> {

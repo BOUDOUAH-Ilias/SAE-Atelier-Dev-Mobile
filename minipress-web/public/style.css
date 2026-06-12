@@ -86,3 +86,42 @@ hr { border: none; border-top: 1px solid #ddd; margin: 16px 0; }
     font-size: 0.82rem;
     color: #1a56db;
 }
+
+.article-title {
+    cursor: pointer;
+    margin: 0 0 4px;
+}
+.article-title:hover { text-decoration: underline; }
+
+#btn-back {
+    padding: 4px 10px;
+    border: 1px solid #aaa;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+#btn-back:hover { background: #e8e8e8; }
+
+.article-detail h1 { margin: 0 0 6px; }
+
+.article-img {
+    display: block;
+    max-width: 100%;
+    margin: 12px 0;
+    border: 1px solid #ddd;
+}
+
+.article-resume {
+    font-style: italic;
+    color: #444;
+    border-left: 3px solid #ccc;
+    padding-left: 10px;
+    margin: 12px 0;
+}
+
+.article-content {
+    margin-top: 16px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}

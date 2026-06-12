@@ -52,3 +52,15 @@ export interface ArticlesResponse {
   count: number;
   articles: ArticleListItem[];
 }
+
+export interface ArticleDetail {
+  id: number;
+  titre: string;
+  resume: string | null;
+  contenu: string;
+  date_creation: string;
+  publie: number;
+  image_url: string | null;
+  categorie: number;
+  auteur: number;
+}

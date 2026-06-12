@@ -66,12 +66,33 @@ async function loadArticlesByAuthor(authorId: number): Promise<void> {
 document.getElementById("filter-input")!.addEventListener("input", applyFilter);
 document.getElementById("btn-all-articles")!.addEventListener("click", loadAllArticles);
 
-document.getElementById("articles")!.addEventListener("click", (e: MouseEvent) => {
-  const link = (e.target as HTMLElement).closest(".author-link");
-  if (!link) return;
-  e.preventDefault();
-  const id = Number((link as HTMLElement).dataset.id);
-  loadArticlesByAuthor(id);
+document.getElementById("articles")!.addEventListener("click", async (e: MouseEvent) => {
+  const target = e.target as HTMLElement;
+
+  if (target.id === "btn-back") {
+    applyFilter();
+    return;
+  }
+
+  const authorLink = target.closest(".author-link");
+  if (authorLink) {
+    e.preventDefault();
+    const id = Number((authorLink as HTMLElement).dataset.id);
+    loadArticlesByAuthor(id);
+    return;
+  }
+
+  const item = target.closest(".article-item");
+  if (item) {
+    const href = (item as HTMLElement).dataset.href;
+    if (!href) return;
+    try {
+      const article = await articlesApi.getArticle(href);
+      renderer.renderArticle(article);
+    } catch {
+      renderer.renderError("Impossible de charger l'article.");
+    }
+  }
 });
 
 loadCategories();

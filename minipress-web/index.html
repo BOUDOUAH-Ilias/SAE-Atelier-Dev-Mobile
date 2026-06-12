@@ -23,8 +23,8 @@
     <script id="list_template" type="text/x-handlebars-template">
       <ul class="article-list">
         {{#each articles}}
-          <li class="article-item">
-            <h2>{{this.article.titre}}</h2>
+          <li class="article-item" data-href="{{this.links.self.href}}">
+            <h2 class="article-title">{{this.article.titre}}</h2>
             <p class="article-date">{{this.article.date_creation}}</p>
             <a class="author-link" data-id="{{this.article.auteur}}" href="#">Auteur #{{this.article.auteur}}</a>
           </li>
