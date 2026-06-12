@@ -11,7 +11,7 @@ services:
       MARIADB_DATABASE: ${DB_NAME}
       MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3307:3306"
+      - "32324:3306"
     networks:
       - minipress.net
     healthcheck:
@@ -24,7 +24,7 @@ services:
   adminer:
     image: adminer:5
     ports:
-      - "67:8080"
+      - "32325:8080"
     networks:
       - minipress.net
     depends_on:
@@ -34,7 +34,7 @@ services:
     image: operrin/php:8.5.4
     command: php -S 0.0.0.0:80 -t /var/www/html
     ports:
-      - "666:80"
+      - "32326:80"
     volumes:
       - ./minipress:/var/www/html
       - ./images:/var/www/html/img
@@ -50,7 +50,7 @@ services:
     image: operrin/php:8.5.4
     command: php -S 0.0.0.0:80 -t /var/www/html
     ports:
-      - "69:80"
+      - "32327:80"
     volumes:
       - ./minipress:/var/www/html
       - ./minipress/src:/var/www/src
@@ -66,7 +66,7 @@ services:
     image: node:22-alpine
     command: sh -c "npm install && npm run dev"
     ports:
-      - "5173:5173"
+      - "32328:5173"
     volumes:
       - ./minipress-web:/app
     working_dir: /app
