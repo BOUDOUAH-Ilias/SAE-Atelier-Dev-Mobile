@@ -4,14 +4,9 @@ namespace minipress\application_core\application\useCases;
 use minipress\application_core\domain\entities\User;
 use minipress\application_core\domain\entities\Article;
 
-class GestionUserService implements GestionUserServiceInterface
-{
+class GestionUserService implements GestionUserServiceInterface{
 
-    /**
-     * Authentifie un utilisateur avec email et mot de passe
-     */
-    public function authenticateUser($email, $password)
-    {
+    public function authenticateUser($email, $password){
         if (empty($email) || empty($password)) {
             throw new \InvalidArgumentException('Email et mot de passe requis');
         }
@@ -22,18 +17,14 @@ class GestionUserService implements GestionUserServiceInterface
             throw new \Exception('Utilisateur non trouvé');
         }
 
-        if (!password_verify($password, $user->password)) {
-            throw new \Exception('Mot de passe incorrect');
+        if (!password_verify($password, $user->mot_de_passe)) {
+            throw new \Exception('Email ou mot de passe incorrect');
         }
 
         return $user;
     }
 
-    /**
-     * Inscrit un nouvel utilisateur
-     */
-    public function registerUser($email, $password)
-    {
+    public function registerUser($email, $password){
         if (empty($email) || empty($password)) {
             throw new \InvalidArgumentException('Email et mot de passe requis');
         }
@@ -50,7 +41,6 @@ class GestionUserService implements GestionUserServiceInterface
             throw new \Exception('Un utilisateur avec cet email existe déjà');
         }
 
-        // Créer le nouvel utilisateur
         $user = new User();
         $user->email = $email;
         $user->mot_de_passe = password_hash($password, PASSWORD_DEFAULT);
@@ -59,35 +49,30 @@ class GestionUserService implements GestionUserServiceInterface
         return $user;
     }
 
-    /**
-     * Démarre une session pour un utilisateur
-     */
-    public function startUserSession(User $user)
-    {
+    public function startUserSession(User $user){
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        $_SESSION['user_id'] = $user->id;
-        $_SESSION['user_email'] = $user->email;
+        $_SESSION['auth_user'] = [
+            'id' => $user->id,
+            'email' => $user->email,
+            'is_admin' => $user->is_admin ?? 0
+        ];
 
         return true;
     }
 
-    /**
-     * Récupère l'utilisateur actuellement connecté
-     */
-    public function getCurrentUser()
-    {
+    public function getCurrentUser(){
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['auth_user']['id'])) {
             return null;
         }
 
-        $user = User::find($_SESSION['user_id']);
+        $user = User::find($_SESSION['auth_user']['id']);
         if (!$user) {
             // Nettoyer la session si l'utilisateur n'existe plus
             $this->logoutUser();
@@ -97,34 +82,24 @@ class GestionUserService implements GestionUserServiceInterface
         return $user;
     }
 
-    /**
-     * Déconnecte l'utilisateur actuel
-     */
-    public function logoutUser()
-    {
+    public function logoutUser(){
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // Détruire toutes les données de session
-        session_destroy();
+        // Supprimer uniquement la clé d'authentification
+        unset($_SESSION['auth_user']);
 
         return true;
     }
 
-    /**
-     * Vérifie si un utilisateur est authentifié
-     */
-    public function isUserAuthenticated()
-    {
+
+    public function isUserAuthenticated(){
         return $this->getCurrentUser() !== null;
     }
 
-    /**
-     * Récupère un utilisateur par son ID
-     */
-    public function getUserById($userId)
-    {
+
+    public function getUserById($userId){
         if (empty($userId)) {
             return null;
         }
@@ -132,11 +107,8 @@ class GestionUserService implements GestionUserServiceInterface
         return User::find($userId);
     }
 
-    /**
-     * Vérifie si un utilisateur peut créer des articles
-     */
-    public function canCreateArticle($userId)
-    {
+
+    public function canCreateArticle($userId){
         if (!$userId) {
             return false;
         }
@@ -145,11 +117,7 @@ class GestionUserService implements GestionUserServiceInterface
         return $user !== null;
     }
 
-    /**
-     * Vérifie si un utilisateur peut modifier un article
-     */
-    public function canEditArticle($userId, $articleId)
-    {
+    public function canEditArticle($userId, $articleId){
         if (!$userId || !$articleId) {
             return false;
         }
@@ -159,24 +127,14 @@ class GestionUserService implements GestionUserServiceInterface
             return false;
         }
 
-        // Seul l'auteur peut modifier son article
         return $article->author_id == $userId;
     }
 
-    /**
-     * Vérifie si un utilisateur peut supprimer un article
-     */
-    public function canDeleteArticle($userId, $articleId)
-    {
-        // Même logique que pour l'édition
+    public function canDeleteArticle($userId, $articleId){
         return $this->canEditArticle($userId, $articleId);
     }
 
-    /**
-     * Récupère un utilisateur par son email
-     */
-    public function getUserByEmail($email)
-    {
+    public function getUserByEmail($email){
         if (empty($email)) {
             return null;
         }
@@ -184,11 +142,7 @@ class GestionUserService implements GestionUserServiceInterface
         return User::where('email', $email)->first();
     }
 
-    /**
-     * Vérifie si un email est déjà utilisé
-     */
-    public function emailExists($email)
-    {
+    public function emailExists($email){
         if (empty($email)) {
             return false;
         }
@@ -196,11 +150,7 @@ class GestionUserService implements GestionUserServiceInterface
         return User::where('email', $email)->exists();
     }
 
-    /**
-     * Met à jour le mot de passe d'un utilisateur
-     */
-    public function updateUserPassword($userId, $newPassword)
-    {
+    public function updateUserPassword($userId, $newPassword){
         if (empty($userId) || empty($newPassword)) {
             throw new \InvalidArgumentException('ID utilisateur et nouveau mot de passe requis');
         }

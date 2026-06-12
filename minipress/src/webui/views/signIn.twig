@@ -1,0 +1,33 @@
+{% extends "home.html.twig" %}
+
+{% block title %}Connexion – Minipress{% endblock %}
+
+{% block content %}
+
+    <h2>Connexion</h2>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="{{ base_path }}/signin">
+
+        <div>
+            <label>Email</label><br>
+            <input type="email" name="email" required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Mot de passe</label><br>
+            <input type="password" name="password" required>
+        </div>
+
+        <br>
+
+        <button type="submit">Se connecter</button>
+
+    </form>
+
+{% endblock %}
