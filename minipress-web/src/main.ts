@@ -3,6 +3,7 @@ import { articles as ArticlesApi } from "./api/articles";
 import { categories as CategoriesApi } from "./api/categories";
 
 renderAllArticles();
+renderAllCategories();
 
 async function renderAllArticles() {
   const api = new ArticlesApi();
@@ -23,5 +24,5 @@ async function renderAllCategories() {
   const templateSource = await response.text();
   const template = Handlebars.compile(templateSource);
 
-  document.getElementById("app")!.innerHTML = template({ categories: data });
+  document.getElementById("app")!.innerHTML += template({ categories: data });
 }

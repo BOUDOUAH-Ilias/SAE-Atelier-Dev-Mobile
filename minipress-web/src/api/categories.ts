@@ -1,14 +1,14 @@
-import type { Category } from "../type";
+import type { CategoryItem, CategoriesResponse } from "../type";
 import { API_BASE_URL } from "../conf/conf";
 
 export class categories {
-  async getCategories(): Promise<Category[]> {
+  async getCategories(): Promise<CategoryItem[]> {
     return fetch(API_BASE_URL + "api/categories")
       .then((res: Response) => {
-        return res.json() as Promise<Category[]>;
+        return res.json() as Promise<CategoriesResponse>;
       })
-      .then((data: Category[]) => {
-        return data;
+      .then((data: CategoriesResponse) => {
+        return data.categories;
       });
   }
 }

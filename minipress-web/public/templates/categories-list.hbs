@@ -1,8 +1,9 @@
 <ul class="categories-list">
-  {{#each articles}}
+  <h1>Liste Catégories</h1>
+  {{#each categories}}
     <li class="category-item">
-      <h2>{{this.article.nom}}</h2>
-      <p class="category-id">{{this.article.id}}</p>
+      <h2>{{this.categorie.nom}}</h2>
+      <p class="category-id">{{this.categorie.id}}</p>
     </li>
   {{/each}}
 </ul>
