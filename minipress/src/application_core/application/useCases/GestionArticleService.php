@@ -44,6 +44,19 @@ class GestionArticleService implements GestionArticleServiceInterface
         return Article::orderBy('date_creation', 'desc')->where('publie', 1)->get()->toArray();
     }
 
+    public function getAllArticles(): array
+    {
+        return Article::orderBy('date_creation', 'desc')->get()->toArray();
+    }
+
+    public function getArticlesForUser(int $userId): array
+    {
+        return Article::where('publie', 1)
+            ->orWhere('id_auteur', $userId)
+            ->orderBy('date_creation', 'desc')
+            ->get()->toArray();
+    }
+
     public function getArticleAsc(): array
     {
         return Article::orderBy('date_creation', 'asc')->where('publie', 1)->get()->toArray();

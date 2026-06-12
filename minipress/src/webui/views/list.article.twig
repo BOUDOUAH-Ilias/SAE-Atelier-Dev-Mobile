@@ -1,6 +1,6 @@
 {% extends "home.html.twig" %}
 
-{% block title %}Liste des articles – Minipress{% endblock %}
+{% block title %}Articles – Minipress{% endblock %}
 
 {% block content %}
 <h2>Articles</h2>
@@ -8,18 +8,46 @@
 {% if articles is empty %}
     <p>Aucun article pour le moment.</p>
 {% else %}
-    <table>
+    <table class="articles-table">
         <thead>
             <tr>
                 <th>Titre</th>
-                <th>Date de création</th>
+                <th>Date</th>
+                <th>Statut</th>
+                {% if current_user %}
+                    <th>Action</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for article in articles %}
-            <tr>
+            {% set is_author = current_user and article.id_auteur == current_user.id %}
+            {% set is_admin  = current_user and current_user.is_admin == 1 %}
+            <tr class="{{ article.publie ? '' : 'unpublished' }}">
                 <td>{{ article.titre }}</td>
-                <td>{{ article.date_creation|date('d/m/Y H:i') }}</td>
+                <td>{{ article.date_creation|date('d/m/Y') }}</td>
+                <td>
+                    <span class="badge {{ article.publie ? 'badge-published' : 'badge-draft' }}">
+                        {{ article.publie ? 'Publié' : 'Brouillon' }}
+                    </span>
+                </td>
+                {% if current_user %}
+                <td>
+                    {% if is_author %}
+                        <form method="post" action="{{ base_path }}/article/{{ article.id }}/publier">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <button type="submit" class="btn btn-sm {{ article.publie ? 'btn-danger' : 'btn-success' }}">
+                                {{ article.publie ? 'Dépublier' : 'Publier' }}
+                            </button>
+                        </form>
+                    {% elseif is_admin and article.publie %}
+                        <form method="post" action="{{ base_path }}/article/{{ article.id }}/publier">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <button type="submit" class="btn btn-sm btn-danger">Dépublier</button>
+                        </form>
+                    {% endif %}
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

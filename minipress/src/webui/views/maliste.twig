@@ -1,31 +1,36 @@
 {% extends "home.html.twig" %}
 
-{% block title %}Liste des articles – Minipress{% endblock %}
+{% block title %}Mes articles – Minipress{% endblock %}
 
 {% block content %}
 <h2>Mes articles</h2>
 
 {% if articles is empty %}
-    <p>Aucun article pour le moment.</p>
+    <p>Vous n'avez pas encore écrit d'article.</p>
 {% else %}
-    <table>
+    <table class="articles-table">
         <thead>
             <tr>
                 <th>Titre</th>
-                <th>Date de création</th>
+                <th>Date</th>
                 <th>Statut</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for article in articles %}
-            <tr>
+            <tr class="{{ article.publie ? '' : 'unpublished' }}">
                 <td>{{ article.titre }}</td>
-                <td>{{ article.date_creation|date('d/m/Y H:i') }}</td>
-                <td>{{ article.publie ? 'Publié' : 'Non publié' }}</td>
+                <td>{{ article.date_creation|date('d/m/Y') }}</td>
                 <td>
-                    <form method="post" action="/article/{{ article.id }}/publier">
-                        <button type="submit">
+                    <span class="badge {{ article.publie ? 'badge-published' : 'badge-draft' }}">
+                        {{ article.publie ? 'Publié' : 'Brouillon' }}
+                    </span>
+                </td>
+                <td>
+                    <form method="post" action="{{ base_path }}/article/{{ article.id }}/publier">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button type="submit" class="btn btn-sm {{ article.publie ? 'btn-danger' : 'btn-success' }}">
                             {{ article.publie ? 'Dépublier' : 'Publier' }}
                         </button>
                     </form>
