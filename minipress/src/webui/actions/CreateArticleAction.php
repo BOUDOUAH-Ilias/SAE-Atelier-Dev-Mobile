@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use minipress\application_core\application\useCases\GestionArticleService;
 use minipress\application_core\application\useCases\GestionUserService;
+use minipress\conf\CsrfHelper;
 
 class CreateArticleAction {
 
@@ -24,6 +25,10 @@ class CreateArticleAction {
         }
 
         $data = $request->getParsedBody();
+
+        if (!CsrfHelper::validate($data)) {
+            return $response->withStatus(403);
+        }
 
         $service = new GestionArticleService();
         $service->createArticle(

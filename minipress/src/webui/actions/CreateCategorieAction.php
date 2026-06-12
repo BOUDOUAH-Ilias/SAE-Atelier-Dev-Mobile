@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use minipress\application_core\application\useCases\CategorieService;
 use minipress\application_core\application\useCases\GestionUserService;
+use minipress\conf\CsrfHelper;
 
 class CreateCategorieAction{
 
@@ -20,6 +21,10 @@ class CreateCategorieAction{
         }
 
         $data = $request->getParsedBody();
+
+        if (!CsrfHelper::validate($data)) {
+            return $response->withStatus(403);
+        }
 
         $service = new CategorieService();
         $service->createCategorie(

@@ -17,6 +17,7 @@
     {% else %}
 
         <form method="post" action="{{ base_path }}/article/create">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
             <div>
                 <label for="titre">Titre *</label><br>

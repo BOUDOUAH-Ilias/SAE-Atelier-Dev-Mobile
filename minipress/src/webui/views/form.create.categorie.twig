@@ -6,6 +6,7 @@
 <h2>Créer une catégorie</h2>
 
 <form method="post" action="{{ base_path }}/categorie/create">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
     <div>
         <label for="nom">Nom *</label><br>

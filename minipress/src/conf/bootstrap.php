@@ -20,6 +20,7 @@ $twig = Twig::create(__DIR__ . '/../webui/views/', ['cache' => false]);
 
 $twig->getEnvironment()->addGlobal('base_path', $basePath);
 $twig->getEnvironment()->addGlobal('current_user', $_SESSION['auth_user'] ?? null);
+$twig->getEnvironment()->addGlobal('csrf_token', \minipress\conf\CsrfHelper::getToken());
 $twig->getEnvironment()->addGlobal('css_dir', $basePath . '/public/css');
 
 $app->add(TwigMiddleware::create($app, $twig));

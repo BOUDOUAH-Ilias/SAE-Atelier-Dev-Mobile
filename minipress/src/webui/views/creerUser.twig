@@ -18,6 +18,7 @@
 {% endif %}
 
 <form method="post" action="{{ base_path }}/admin/user/create" style="max-width: 500px;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
     <div>
         <label for="email">Adresse Email (Identifiant) *</label><br>

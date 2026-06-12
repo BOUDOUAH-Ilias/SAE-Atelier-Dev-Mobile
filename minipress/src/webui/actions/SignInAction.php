@@ -5,6 +5,7 @@ namespace minipress\webui\actions;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
+use minipress\conf\CsrfHelper;
 
 class SignInAction {
 
@@ -23,6 +24,10 @@ class SignInAction {
         }
 
         $data = $request->getParsedBody();
+
+        if (!CsrfHelper::validate($data)) {
+            return $response->withStatus(403);
+        }
 
         try {
             $user = $this->userService->authenticateUser(

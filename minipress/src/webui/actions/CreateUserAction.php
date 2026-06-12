@@ -5,6 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 use minipress\application_core\application\useCases\GestionUserService;
+use minipress\conf\CsrfHelper;
 
 class CreateUserAction
 {
@@ -20,6 +21,11 @@ class CreateUserAction
         }
 
         $data = $request->getParsedBody();
+
+        if (!CsrfHelper::validate($data)) {
+            return $response->withStatus(403);
+        }
+
         $email = $data['email'] ?? '';
         $password = $data['password'] ?? '';
 
