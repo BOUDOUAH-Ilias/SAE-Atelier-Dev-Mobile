@@ -30,12 +30,7 @@ return function (\Slim\App $app): void {
         ->setName('article.list');
 
     $app->get('/articles/categorie/{id}', minipress\webui\actions\ShowListArticleByCategorieAction::class)
-        ->setName('article.list.categorie');  
-      $app->get('/categorie/create', minipress\webui\actions\ShowCreateCategorieAction::class)
-        ->setName('categorie.create');
-      
-         $app->post('/categorie/create', minipress\webui\actions\CreateCategorieAction::class)
-        ->setName('categorie.create.post');
+        ->setName('article.list.categorie');
 
     $userService = new \minipress\application_core\application\useCases\GestionUserService();
 
@@ -54,11 +49,14 @@ return function (\Slim\App $app): void {
     $app->post('/admin/user/create', minipress\webui\actions\CreateUserAction::class)
         ->setName('user.create.post');
 
-    $app->map(['GET', 'POST'], '/signin',
+    $app->map(
+        ['GET', 'POST'],
+        '/signin',
         new \minipress\webui\actions\SignInAction($userService)
     )->setName('signin');
 
-    $app->get('/signout',
+    $app->get(
+        '/signout',
         new \minipress\webui\actions\SignOutAction($userService)
     )->setName('signout');
 
