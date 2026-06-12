@@ -1,7 +1,7 @@
 import type { CategoryItem, CategoriesResponse } from "../type";
 
 export class Categories {
-  private readonly baseUrl: string;
+  private baseUrl: string;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;

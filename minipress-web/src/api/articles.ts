@@ -1,7 +1,7 @@
 import type { ArticleListItem, ArticleDetail, ArticlesResponse, AuthorArticlesResponse } from "../type";
 
 export class Articles {
-  private readonly baseUrl: string;
+  private baseUrl: string;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;

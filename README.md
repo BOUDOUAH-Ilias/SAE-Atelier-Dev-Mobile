@@ -3,7 +3,7 @@
 ## Groupe
 
 - ANTZORN Hugo
-- BOUDOUAH Iliad
+- BOUDOUAH Ilias
 - AIME--CABOCEL Léandre
 - DELATTRE Maxence
 
