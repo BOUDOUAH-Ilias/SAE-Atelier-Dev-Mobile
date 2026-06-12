@@ -4,6 +4,7 @@
 namespace minipress\application_core\application\useCases;
 
 use minipress\application_core\domain\entities\Article;
+use minipress\application_core\application\exceptions\EntityNotFoundException;
 use Override;
 
 class GestionArticleService implements GestionArticleServiceInterface
@@ -25,11 +26,20 @@ class GestionArticleService implements GestionArticleServiceInterface
 <<<<<<< HEAD
     public function getArticleDesc(): array
     {
+<<<<<<< HEAD
         return Article::orderBy('date_creation', 'desc')->get()->toArray();
 =======
     public function getArticleDesc(): array {
         return Article::with('auteur')->orderBy('date_creation', 'desc')->get();
 >>>>>>> maxence
+=======
+        return Article::orderBy('date_creation', 'desc')->where('publie', 1)->get()->toArray();
+    }
+
+    public function getArticleAsc(): array
+    {
+        return Article::orderBy('date_creation', 'asc')->where('publie', 1)->get()->toArray();
+>>>>>>> 6b32529cd9ffe449d9b4d7df58d83a95b2c1ad61
     }
 
 
@@ -37,18 +47,28 @@ class GestionArticleService implements GestionArticleServiceInterface
     {
         return Article::where('id_categorie', $idCategorie)
             ->orderBy('date_creation', 'desc')
+<<<<<<< HEAD
             ->get();
+=======
+            ->where('publie', 1)
+            ->get()
+            ->toArray();
+>>>>>>> 6b32529cd9ffe449d9b4d7df58d83a95b2c1ad61
     }
 
 <<<<<<< HEAD
 
     public function getArticles(): array
     {
+<<<<<<< HEAD
         return Article::all()->toArray();
 =======
     public function getArticles(): array {
         return Article::with('auteur')->get();
 >>>>>>> maxence
+=======
+        return Article::where('publie', 1)->get()->toArray();
+>>>>>>> 6b32529cd9ffe449d9b4d7df58d83a95b2c1ad61
     }
 
     public function getArticleById(int $id): array
@@ -64,6 +84,29 @@ class GestionArticleService implements GestionArticleServiceInterface
     public function getArticlesParAutheurId(int $idAuteur): array
     {
         return Article::where('id_auteur', $idAuteur)->where('publie', 1)->with('auteur')->get()->all();
+    }
+
+    public function getArticlesSorted(?string $sort): array
+    {
+        $query = Article::where('publie', 1);
+
+        switch ($sort) {
+            case 'date-asc':
+                $query->orderBy('date_creation', 'asc');
+                break;
+            case 'date-desc':
+                $query->orderBy('date_creation', 'desc');
+                break;
+            case 'auteur':
+                $query->join('user', 'article.id_auteur', '=', 'user.id')
+                    ->orderBy('user.email', 'asc')
+                    ->select('article.*');
+                break;
+            default:
+                $query->orderBy('date_creation', 'desc');
+        }
+
+        return $query->get()->toArray();
     }
 
 }

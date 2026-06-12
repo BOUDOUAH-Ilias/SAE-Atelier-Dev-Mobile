@@ -54,6 +54,7 @@ return function (\Slim\App $app): void {
     $app->post('/admin/user/create', minipress\webui\actions\CreateUserAction::class)
         ->setName('user.create.post');
 
+<<<<<<< HEAD
     $app->map(['GET', 'POST'], '/signin',
         new \minipress\webui\actions\SignInAction($userService)
     )->setName('signin');
@@ -61,4 +62,7 @@ return function (\Slim\App $app): void {
     $app->get('/signout',
         new \minipress\webui\actions\SignOutAction($userService)
     )->setName('signout');
+=======
+
+>>>>>>> 6b32529cd9ffe449d9b4d7df58d83a95b2c1ad61
 };

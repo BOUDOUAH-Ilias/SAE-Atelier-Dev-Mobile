@@ -7,22 +7,24 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use minipress\application_core\application\useCases\GestionArticleService;
 
-class GetArticlesByCategorieAction {
+class GetArticlesByCategorieAction
+{
 
-public function __invoke(Request $rq, Response $rs, array $args){
-    $id = intval($args['id']);
-    $service = new GestionArticleService();
-    $articles = $service->getArticleByCategorie($id);
+    public function __invoke(Request $rq, Response $rs, array $args)
+    {
+        $id = intval($args['id']);
+        $service = new GestionArticleService();
+        $articles = $service->getArticleByCategorie($id);
 
-    $data = [
-            'type'       => 'collection',
-            'count'      => count($articles),
+        $data = [
+            'type' => 'collection',
+            'count' => count($articles),
             'articles' => array_map(function (array $art) {
                 return [
                     'article' => [
-                        'titre'          => $art['titre'],
-                        'date_creation'     => $art['date_creation'],
-                        'auteur'     => $art['id_auteur'],
+                        'titre' => $art['titre'],
+                        'date_creation' => $art['date_creation'],
+                        'auteur' => $art['id_auteur'],
                     ],
 
                     'links' => [
@@ -32,8 +34,8 @@ public function __invoke(Request $rq, Response $rs, array $args){
             }, $articles),
         ];
 
-    $rs->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        $rs->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
-    return $rs->withHeader('Content-Type', 'application/json');
-}
+        return $rs->withHeader('Content-Type', 'application/json');
+    }
 }
