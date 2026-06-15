@@ -6,113 +6,164 @@ part of 'articles_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint, type=warning
+String _$articlesHash() => r'0d8ddb55693bce4ebf353c85f8874c4916f53781';
 
+/// See also [articles].
 @ProviderFor(articles)
-final articlesProvider = ArticlesProvider._();
+final articlesProvider =
+    AutoDisposeFutureProvider<List<ArticleReduit>>.internal(
+      articles,
+      name: r'articlesProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$articlesHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-final class ArticlesProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<List<Article>>,
-          List<Article>,
-          FutureOr<List<Article>>
-        >
-    with $FutureModifier<List<Article>>, $FutureProvider<List<Article>> {
-  ArticlesProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'articlesProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ArticlesRef = AutoDisposeFutureProviderRef<List<ArticleReduit>>;
+String _$articleDetailHash() => r'ac5544c3df01fd285119ba5d5ce2cd743b6788b0';
 
-  @override
-  String debugGetCreateSourceHash() => _$articlesHash();
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
 
-  @$internal
-  @override
-  $FutureProviderElement<List<Article>> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
 
-  @override
-  FutureOr<List<Article>> create(Ref ref) {
-    return articles(ref);
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
 
-String _$articlesHash() => r'52d29f0082224bee9550e79d7c41eb382b3ed6fd';
-
+/// See also [articleDetail].
 @ProviderFor(articleDetail)
-final articleDetailProvider = ArticleDetailFamily._();
+const articleDetailProvider = ArticleDetailFamily();
 
-final class ArticleDetailProvider
-    extends $FunctionalProvider<AsyncValue<Article>, Article, FutureOr<Article>>
-    with $FutureModifier<Article>, $FutureProvider<Article> {
-  ArticleDetailProvider._({
-    required ArticleDetailFamily super.from,
-    required int super.argument,
-  }) : super(
-         retry: null,
-         name: r'articleDetailProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
+/// See also [articleDetail].
+class ArticleDetailFamily extends Family<AsyncValue<Article>> {
+  /// See also [articleDetail].
+  const ArticleDetailFamily();
 
-  @override
-  String debugGetCreateSourceHash() => _$articleDetailHash();
-
-  @override
-  String toString() {
-    return r'articleDetailProvider'
-        ''
-        '($argument)';
+  /// See also [articleDetail].
+  ArticleDetailProvider call(int id) {
+    return ArticleDetailProvider(id);
   }
 
-  @$internal
   @override
-  $FutureProviderElement<Article> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  ArticleDetailProvider getProviderOverride(
+    covariant ArticleDetailProvider provider,
+  ) {
+    return call(provider.id);
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
 
   @override
-  FutureOr<Article> create(Ref ref) {
-    final argument = this.argument as int;
-    return articleDetail(ref, argument);
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'articleDetailProvider';
+}
+
+/// See also [articleDetail].
+class ArticleDetailProvider extends AutoDisposeFutureProvider<Article> {
+  /// See also [articleDetail].
+  ArticleDetailProvider(int id)
+    : this._internal(
+        (ref) => articleDetail(ref as ArticleDetailRef, id),
+        from: articleDetailProvider,
+        name: r'articleDetailProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$articleDetailHash,
+        dependencies: ArticleDetailFamily._dependencies,
+        allTransitiveDependencies:
+            ArticleDetailFamily._allTransitiveDependencies,
+        id: id,
+      );
+
+  ArticleDetailProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<Article> Function(ArticleDetailRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ArticleDetailProvider._internal(
+        (ref) => create(ref as ArticleDetailRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Article> createElement() {
+    return _ArticleDetailProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ArticleDetailProvider && other.argument == argument;
+    return other is ArticleDetailProvider && other.id == id;
   }
 
   @override
   int get hashCode {
-    return argument.hashCode;
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
   }
 }
 
-String _$articleDetailHash() => r'ac5544c3df01fd285119ba5d5ce2cd743b6788b0';
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ArticleDetailRef on AutoDisposeFutureProviderRef<Article> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
 
-final class ArticleDetailFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<Article>, int> {
-  ArticleDetailFamily._()
-    : super(
-        retry: null,
-        name: r'articleDetailProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
-      );
-
-  ArticleDetailProvider call(int id) =>
-      ArticleDetailProvider._(argument: id, from: this);
+class _ArticleDetailProviderElement
+    extends AutoDisposeFutureProviderElement<Article>
+    with ArticleDetailRef {
+  _ArticleDetailProviderElement(super.provider);
 
   @override
-  String toString() => r'articleDetailProvider';
+  int get id => (origin as ArticleDetailProvider).id;
 }
+
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
