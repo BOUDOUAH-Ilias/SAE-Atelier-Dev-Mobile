@@ -8,7 +8,6 @@
     <title>minipress-web</title>
   </head>
   <body>
-
     <script id="categories_template" type="text/x-handlebars-template">
       <ul class="categories-list">
         <h1>Liste Catégories</h1>
@@ -26,16 +25,25 @@
           <li class="article-item" data-href="{{this.links.self.href}}">
             <h2 class="article-title">{{this.article.titre}}</h2>
             <p class="article-date">{{this.article.date_creation}}</p>
-            <a class="author-link" data-id="{{this.article.auteur}}" href="#">Auteur #{{this.article.auteur}}</a>
+            <a
+              class="author-link"
+              data-id="{{this.article.auteur}}"
+              href="#"
+            >Auteur #{{this.article.auteur}}</a>
           </li>
         {{/each}}
       </ul>
     </script>
 
     <div id="categories"></div>
-    <hr>
+    <hr />
     <button id="btn-all-articles">Tous les articles</button>
-    <input type="text" id="filter-input" placeholder="Filtrer par mot clé dans le titre..." />
+    <button id="order-button">ascendant</button>
+    <input
+      type="text"
+      id="filter-input"
+      placeholder="Filtrer par mot clé dans le titre..."
+    />
     <div id="articles"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

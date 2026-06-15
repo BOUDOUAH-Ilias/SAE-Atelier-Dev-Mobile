@@ -13,13 +13,40 @@ let currentArticles: ArticleListItem[] = [];
 function displayArticles(articles: ArticleListItem[]): void {
   currentArticles = articles;
   applyFilter();
+  const button = document.getElementById("order-button") as HTMLInputElement;
+  // console.log(button);
+  if (button.innerText == "ascendant") {
+    articles.sort((a: ArticleListItem, b: ArticleListItem) => {
+      const dateA = new Date(a.article.date_creation);
+      const dateB = new Date(b.article.date_creation);
+      return dateB.getTime() - dateA.getTime();
+    });
+  } else if (button.innerText == "descendant") {
+    articles.sort((a: ArticleListItem, b: ArticleListItem) => {
+      const dateA = new Date(a.article.date_creation);
+      const dateB = new Date(b.article.date_creation);
+      return dateA.getTime() - dateB.getTime();
+    });
+  } else {
+    // console.log("ça marche pas.");
+  }
+  articles.sort((a: ArticleListItem, b: ArticleListItem) => {
+    const dateA = new Date(a.article.date_creation);
+    const dateB = new Date(b.article.date_creation);
+    return dateA.getTime() - dateB.getTime();
+  });
 }
 
 function applyFilter(): void {
-  const keyword = (document.getElementById("filter-input") as HTMLInputElement)
-    .value.trim().toLowerCase();
+  const keyword = (
+    document.getElementById("filter-input") as HTMLInputElement
+  ).value
+    .trim()
+    .toLowerCase();
   const filtered: ArticleListItem[] = keyword
-    ? currentArticles.filter((a) => a.article.titre.toLowerCase().includes(keyword))
+    ? currentArticles.filter((a) =>
+        a.article.titre.toLowerCase().includes(keyword),
+      )
     : currentArticles;
   renderer.renderArticles(filtered);
 }
@@ -51,7 +78,9 @@ async function loadArticlesByCategory(categoryId: number): Promise<void> {
   try {
     displayArticles(await articlesApi.getArticlesByCategory(categoryId));
   } catch (e) {
-    renderer.renderError("Impossible de charger les articles de cette catégorie.");
+    renderer.renderError(
+      "Impossible de charger les articles de cette catégorie.",
+    );
   }
 }
 
@@ -63,37 +92,54 @@ async function loadArticlesByAuthor(authorId: number): Promise<void> {
   }
 }
 
-document.getElementById("filter-input")!.addEventListener("input", applyFilter);
-document.getElementById("btn-all-articles")!.addEventListener("click", loadAllArticles);
-
-document.getElementById("articles")!.addEventListener("click", async (e: MouseEvent) => {
-  const target = e.target as HTMLElement;
-
-  if (target.id === "btn-back") {
-    applyFilter();
-    return;
-  }
-
-  const authorLink = target.closest(".author-link");
-  if (authorLink) {
-    e.preventDefault();
-    const id = Number((authorLink as HTMLElement).dataset.id);
-    loadArticlesByAuthor(id);
-    return;
-  }
-
-  const item = target.closest(".article-item");
-  if (item) {
-    const href = (item as HTMLElement).dataset.href;
-    if (!href) return;
-    try {
-      const article = await articlesApi.getArticle(href);
-      renderer.renderArticle(article);
-    } catch {
-      renderer.renderError("Impossible de charger l'article.");
-    }
+const orderButton = document.getElementById("order-button");
+orderButton?.addEventListener("click", async () => {
+  displayArticles(await articlesApi.getArticles());
+  if (orderButton.innerText == "ascendant") {
+    orderButton.innerText = "descendant";
+    // console.log(orderButton.innerHTML);
+  } else if (orderButton.innerText == "descendant") {
+    orderButton.innerText = "ascendant";
+    // console.log(orderButton.innerHTML);
+  } else {
+    console.log("explosion");
   }
 });
+document.getElementById("filter-input")!.addEventListener("input", applyFilter);
+document
+  .getElementById("btn-all-articles")!
+  .addEventListener("click", loadAllArticles);
+
+document
+  .getElementById("articles")!
+  .addEventListener("click", async (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+
+    if (target.id === "btn-back") {
+      applyFilter();
+      return;
+    }
+
+    const authorLink = target.closest(".author-link");
+    if (authorLink) {
+      e.preventDefault();
+      const id = Number((authorLink as HTMLElement).dataset.id);
+      loadArticlesByAuthor(id);
+      return;
+    }
+
+    const item = target.closest(".article-item");
+    if (item) {
+      const href = (item as HTMLElement).dataset.href;
+      if (!href) return;
+      try {
+        const article = await articlesApi.getArticle(href);
+        renderer.renderArticle(article);
+      } catch {
+        renderer.renderError("Impossible de charger l'article.");
+      }
+    }
+  });
 
 loadCategories();
 loadAllArticles();
