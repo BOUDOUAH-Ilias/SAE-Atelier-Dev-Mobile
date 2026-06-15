@@ -37,7 +37,7 @@
             {% set is_author = current_user and article.id_auteur == current_user.id %}
             {% set is_admin  = current_user and current_user.is_admin == 1 %}
             <tr class="{{ (current_user and not article.publie) ? 'unpublished' : '' }}">
-                <td>{{ article.titre }}</td>
+                <td><a href="{{ base_path }}/article/{{ article.id }}">{{ article.titre }}</a></td>
                 <td>{{ article.date_creation|date('d/m/Y') }}</td>
                 <td>{{ article.auteur.email ?? '—' }}</td>
                 {% if current_user %}

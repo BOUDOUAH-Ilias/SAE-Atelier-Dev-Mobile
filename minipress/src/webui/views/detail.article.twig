@@ -1,0 +1,32 @@
+{% extends "home.html.twig" %}
+
+{% block title %}{{ article.titre }} – Minipress{% endblock %}
+
+{% block content %}
+<article class="article-detail">
+    <header class="article-detail-header">
+        <h1>{{ article.titre }}</h1>
+        <p class="article-meta">
+            Publié le {{ article.date_creation|date('d/m/Y') }}
+            {% if article.auteur is defined and article.auteur %}
+                par <strong>{{ article.auteur.email }}</strong>
+            {% endif %}
+        </p>
+        {% if article.image_url %}
+            <img class="article-img" src="{{ article.image_url|e }}" alt="">
+        {% endif %}
+    </header>
+
+    {% if article.resume %}
+        <div class="article-resume">
+            {{ article.resume|markdown }}
+        </div>
+    {% endif %}
+
+    <div class="article-content">
+        {{ article.contenu|markdown }}
+    </div>
+
+    <p><a href="{{ base_path }}/articles">← Retour à la liste</a></p>
+</article>
+{% endblock %}
