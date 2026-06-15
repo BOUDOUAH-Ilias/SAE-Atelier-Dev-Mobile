@@ -26,6 +26,9 @@ return function (\Slim\App $app): void {
     $app->post('/article/create', minipress\webui\actions\CreateArticleAction::class)
         ->setName('article.create.post');
 
+    $app->get('/article/{id:\d+}', minipress\webui\actions\ShowArticleDetailAction::class)
+        ->setName('article.detail');
+
     $app->get('/articles', minipress\webui\actions\ShowListArticleAction::class)
         ->setName('article.list');
 
