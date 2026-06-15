@@ -23,6 +23,13 @@ $twig->getEnvironment()->addGlobal('current_user', $_SESSION['auth_user'] ?? nul
 $twig->getEnvironment()->addGlobal('csrf_token', \minipress\conf\CsrfHelper::getToken());
 $twig->getEnvironment()->addGlobal('css_dir', $basePath . '/public/css');
 
+$converter = new \League\CommonMark\CommonMarkConverter(['html_input' => 'strip', 'allow_unsafe_links' => false]);
+$twig->getEnvironment()->addFilter(new \Twig\TwigFilter(
+    'markdown',
+    fn(string $text): string => $converter->convert($text)->getContent(),
+    ['is_safe' => ['html']]
+));
+
 $app->add(TwigMiddleware::create($app, $twig));
 
 $routes = require_once __DIR__ . '/routes.php';
