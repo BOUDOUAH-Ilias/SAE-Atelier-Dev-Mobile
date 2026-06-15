@@ -21,7 +21,7 @@
         <tbody>
             {% for article in articles %}
             <tr class="{{ article.publie ? '' : 'unpublished' }}">
-                <td>{{ article.titre }}</td>
+                <td><a href="{{ base_path }}/article/{{ article.id }}">{{ article.titre }}</a></td>
                 <td>{{ article.date_creation|date('d/m/Y') }}</td>
                 <td>{{ article.auteur.email ?? '—' }}</td>
                 <td>

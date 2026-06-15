@@ -14,6 +14,7 @@
     "vite": "^8.0.12"
   },
   "dependencies": {
-    "handlebars": "^4.7.9"
+    "handlebars": "^4.7.9",
+    "marked": "^18.0.5"
   }
 }
