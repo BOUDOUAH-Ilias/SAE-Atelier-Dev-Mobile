@@ -7,9 +7,13 @@ part 'article.g.dart';
 class Article with _$Article {
   const factory Article({
     required int id,
-    required String title,
-    required String body,
-    @JsonKey(name: 'user_id') required int userId,
+    @JsonKey(defaultValue: '') required String titre,
+    @JsonKey(defaultValue: '') required String resume,
+    @JsonKey(defaultValue: '') required String contenu,
+    @JsonKey(defaultValue: '') required String date_creation,
+    @JsonKey(defaultValue: 0) required int categorie,
+    @JsonKey(defaultValue: 0) required int publie,
+    @JsonKey(name: 'id_auteur', defaultValue: 0) required int userId,
   }) = _Article;
   factory Article.fromJson(Map<String, dynamic> json) =>
       _$ArticleFromJson(json);

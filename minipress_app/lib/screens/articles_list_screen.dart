@@ -18,7 +18,7 @@ class ArticlesListScreen extends ConsumerWidget {
           itemBuilder: (context, index) {
             final article = articles[index];
             return ListTile(
-              title: Text(article.title),
+              title: Text(article.titre),
               subtitle: Text('Article #${article.id}'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => context.go('/articles/${article.id}'),
