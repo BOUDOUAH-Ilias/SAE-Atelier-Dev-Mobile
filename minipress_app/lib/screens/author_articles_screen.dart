@@ -33,23 +33,19 @@ class AuthorArticlesScreen extends ConsumerWidget {
           if (articles.isEmpty) {
             return Center(child: Text('Aucun article de "$titre".'));
           }
-          return ListView.builder(
-            itemCount: articles.length,
-            itemBuilder: (context, index) {
-              final article = articles[index];
-              return ListTile(
-                title: Text(article.titre),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Article #${article.id}'),
-                    Text('Date : ${article.date_creation}'),
-                  ],
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.push('/articles/${article.id}'),
-              );
-            },
+          return ListView(
+            children: articles.map((article) => ListTile(
+              title: Text(article.titre),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Article #${article.id}'),
+                  Text('Date : ${article.date_creation}'),
+                ],
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/articles/${article.id}'),
+            )).toList(),
           );
         },
       ),

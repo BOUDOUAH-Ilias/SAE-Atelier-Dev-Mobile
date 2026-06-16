@@ -55,10 +55,8 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
               error: (error, _) => Center(child: Text('Erreur : $error')),
               data: (articles) {
                 final sorted = _sorted(articles);
-                return ListView.builder(
-                  itemCount: sorted.length,
-                  itemBuilder: (context, index) {
-                    final article = sorted[index];
+                return ListView(
+                  children: sorted.map((article) {
                     final asyncNomAuteur = ref.watch(
                       auteurNomProvider(article.userId),
                     );
@@ -91,7 +89,7 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => context.go('/articles/${article.id}'),
                     );
-                  },
+                  }).toList(),
                 );
               },
             ),
@@ -136,21 +134,19 @@ class _CategoriesZone extends ConsumerWidget {
                   style: const TextStyle(fontSize: 12),
                 ),
               ),
-              data: (categories) => ListView.separated(
+              data: (categories) => ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final categorie = categories[index];
-                  return ActionChip(
+                children: categories.map((categorie) => Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ActionChip(
                     label: Text(categorie.nom),
                     onPressed: () => context.push(
                       '/categories/${categorie.id}',
                       extra: categorie.nom,
                     ),
-                  );
-                },
+                  ),
+                )).toList(),
               ),
             ),
           ),
