@@ -106,7 +106,7 @@ orderButton?.addEventListener("click", async () => {
   } else {
     console.log("explosion");
   }
-  displayArticles(await articlesApi.getArticles());
+  displayArticles(currentArticles);
 });
 document.getElementById("filter-input")!.addEventListener("input", applyFilter);
 document
