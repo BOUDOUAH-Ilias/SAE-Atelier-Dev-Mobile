@@ -14,6 +14,7 @@ class Article with _$Article {
     @JsonKey(defaultValue: 0) required int categorie,
     @JsonKey(defaultValue: 0) required int publie,
     @JsonKey(name: 'id_auteur', defaultValue: 0) required int userId,
+    @JsonKey(name: 'image_url') required String? imageUrl,
   }) = _Article;
   factory Article.fromJson(Map<String, dynamic> json) =>
       _$ArticleFromJson(json);

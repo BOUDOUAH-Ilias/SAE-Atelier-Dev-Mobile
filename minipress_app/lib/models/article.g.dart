@@ -16,6 +16,7 @@ _$ArticleImpl _$$ArticleImplFromJson(Map<String, dynamic> json) =>
       categorie: (json['categorie'] as num?)?.toInt() ?? 0,
       publie: (json['publie'] as num?)?.toInt() ?? 0,
       userId: (json['id_auteur'] as num?)?.toInt() ?? 0,
+      imageUrl: json['image_url'] as String?,
     );
 
 Map<String, dynamic> _$$ArticleImplToJson(_$ArticleImpl instance) =>
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$ArticleImplToJson(_$ArticleImpl instance) =>
       'categorie': instance.categorie,
       'publie': instance.publie,
       'id_auteur': instance.userId,
+      'image_url': instance.imageUrl,
     };
