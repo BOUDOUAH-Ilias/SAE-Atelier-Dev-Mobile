@@ -23,4 +23,23 @@ class ApiClient {
     final data = response.data;
     return data['article'] as Map<String, dynamic>;
   }
+
+  Future<List<Map<String, dynamic>>> getCategories() async {
+    final response = await _dio.get('/categories');
+    final data = response.data;
+    return List<Map<String, dynamic>>.from(data['categories']);
+  }
+
+  Future<List<Map<String, dynamic>>> getArticlesByCategorie(
+    int categorieId,
+  ) async {
+    final response = await _dio.get('/categories/$categorieId/articles');
+    final data = response.data;
+    return List<Map<String, dynamic>>.from(data['articles']);
+  }
+
+  Future<Map<String, dynamic>> getAuteurById(int id) async {
+    final response = await _dio.get('/auteurs/$id');
+    return response.data as Map<String, dynamic>;
+  }
 }

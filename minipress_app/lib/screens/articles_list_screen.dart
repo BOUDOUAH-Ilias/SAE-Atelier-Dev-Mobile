@@ -1,9 +1,10 @@
-// lib/screens/articles_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../models/article_reduit.dart';
 import '../providers/articles_provider.dart';
+import '../providers/categories_provider.dart';
+import '../providers/auteur_provider.dart';
 
 class ArticlesListScreen extends ConsumerStatefulWidget {
   const ArticlesListScreen({super.key});
@@ -14,31 +15,14 @@ class ArticlesListScreen extends ConsumerStatefulWidget {
 
 class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
   bool _sortAscending = false;
-  final TextEditingController _controlleurRecherche = TextEditingController();
-  String _motrecherche = '';
 
-  @override
-  void dispose() {
-    _controlleurRecherche.dispose();
-    super.dispose();
-  }
-
-  List<ArticleReduit> _filteredAndSorted(List<ArticleReduit> articles) {
-    var result = [...articles];
-
-    // Filtre par titre
-    if (_motrecherche.isNotEmpty) {
-      final q = _motrecherche.toLowerCase();
-      result = result.where((a) => a.titre.toLowerCase().contains(q)).toList();
-    }
-
-    // Tri par date
+  List<ArticleReduit> _sorted(List<ArticleReduit> articles) {
+    final result = [...articles];
     result.sort(
       (a, b) => _sortAscending
           ? a.date_creation.compareTo(b.date_creation)
           : b.date_creation.compareTo(a.date_creation),
     );
-
     return result;
   }
 
@@ -63,52 +47,111 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
       ),
       body: Column(
         children: [
-          // Barre de recherche
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-            child: TextField(
-              controller: _controlleurRecherche,
-              decoration: InputDecoration(
-                hintText: 'Rechercher dans les titres…',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _motrecherche.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _controlleurRecherche.clear();
-                          setState(() => _motrecherche = '');
-                        },
-                      )
-                    : null,
-                border: const OutlineInputBorder(),
-                isDense: true,
-              ),
-              onChanged: (v) => setState(() => _motrecherche = v),
-            ),
-          ),
-          // Liste
+          const _CategoriesZone(),
+          const Divider(height: 1),
           Expanded(
             child: asyncArticles.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, _) => Center(child: Text('Erreur : $error')),
               data: (articles) {
-                final result = _filteredAndSorted(articles);
-                if (result.isEmpty) {
-                  return const Center(child: Text('Aucun article trouvé.'));
-                }
+                final sorted = _sorted(articles);
                 return ListView.builder(
-                  itemCount: result.length,
+                  itemCount: sorted.length,
                   itemBuilder: (context, index) {
-                    final article = result[index];
+                    final article = sorted[index];
+                    final asyncNomAuteur = ref.watch(
+                      auteurNomProvider(article.userId),
+                    );
+                    final nomAuteur = asyncNomAuteur.maybeWhen(
+                      data: (nom) => nom,
+                      orElse: () => 'Auteur #${article.userId}',
+                    );
                     return ListTile(
                       title: Text(article.titre),
-                      subtitle: Text(article.date_creation),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Article #${article.id}'),
+                          Text('Date : ${article.date_creation}'),
+                          GestureDetector(
+                            onTap: () => context.push(
+                              '/auteurs/${article.userId}',
+                              extra: nomAuteur,
+                            ),
+                            child: Text(
+                              'Auteur : $nomAuteur',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => context.go('/articles/${article.id}'),
                     );
                   },
                 );
               },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoriesZone extends ConsumerWidget {
+  const _CategoriesZone();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncCategories = ref.watch(categoriesProvider);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Catégories',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 40,
+            child: asyncCategories.when(
+              loading: () => const Center(
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+              error: (error, _) => Center(
+                child: Text(
+                  'Erreur catégories : $error',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+              data: (categories) => ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: categories.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final categorie = categories[index];
+                  return ActionChip(
+                    label: Text(categorie.nom),
+                    onPressed: () => context.push(
+                      '/categories/${categorie.id}',
+                      extra: categorie.nom,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
