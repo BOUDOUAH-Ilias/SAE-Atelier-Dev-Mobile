@@ -12,29 +12,34 @@ let currentArticles: ArticleListItem[] = [];
 
 function displayArticles(articles: ArticleListItem[]): void {
   currentArticles = articles;
-  applyFilter();
   const button = document.getElementById("order-button") as HTMLInputElement;
   // console.log(button);
-  if (button.innerText == "ascendant") {
-    articles.sort((a: ArticleListItem, b: ArticleListItem) => {
+  if (button.innerText == "descendant") {
+    currentArticles.sort((a: ArticleListItem, b: ArticleListItem) => {
       const dateA = new Date(a.article.date_creation);
       const dateB = new Date(b.article.date_creation);
-      return dateB.getTime() - dateA.getTime();
+      if (dateA.getTime() > dateB.getTime()) {
+        return 1;
+      } else {
+        return -1;
+      }
     });
-  } else if (button.innerText == "descendant") {
-    articles.sort((a: ArticleListItem, b: ArticleListItem) => {
+    console.table(currentArticles);
+  } else if (button.innerText == "ascendant") {
+    currentArticles.sort((a: ArticleListItem, b: ArticleListItem) => {
       const dateA = new Date(a.article.date_creation);
       const dateB = new Date(b.article.date_creation);
-      return dateA.getTime() - dateB.getTime();
+      if (dateA.getTime() < dateB.getTime()) {
+        return 1;
+      } else {
+        return -1;
+      }
     });
+    console.table(currentArticles);
   } else {
-    // console.log("ça marche pas.");
+    console.log("ça marche pas.");
   }
-  articles.sort((a: ArticleListItem, b: ArticleListItem) => {
-    const dateA = new Date(a.article.date_creation);
-    const dateB = new Date(b.article.date_creation);
-    return dateA.getTime() - dateB.getTime();
-  });
+  applyFilter();
 }
 
 function applyFilter(): void {
@@ -94,16 +99,14 @@ async function loadArticlesByAuthor(authorId: number): Promise<void> {
 
 const orderButton = document.getElementById("order-button");
 orderButton?.addEventListener("click", async () => {
-  displayArticles(await articlesApi.getArticles());
   if (orderButton.innerText == "ascendant") {
     orderButton.innerText = "descendant";
-    // console.log(orderButton.innerHTML);
   } else if (orderButton.innerText == "descendant") {
     orderButton.innerText = "ascendant";
-    // console.log(orderButton.innerHTML);
   } else {
     console.log("explosion");
   }
+  displayArticles(await articlesApi.getArticles());
 });
 document.getElementById("filter-input")!.addEventListener("input", applyFilter);
 document
