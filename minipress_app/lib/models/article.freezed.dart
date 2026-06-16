@@ -36,6 +36,8 @@ mixin _$Article {
   int get publie => throw _privateConstructorUsedError;
   @JsonKey(name: 'id_auteur', defaultValue: 0)
   int get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image_url')
+  String? get imageUrl => throw _privateConstructorUsedError;
 
   /// Serializes this Article to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -60,6 +62,7 @@ abstract class $ArticleCopyWith<$Res> {
     @JsonKey(defaultValue: 0) int categorie,
     @JsonKey(defaultValue: 0) int publie,
     @JsonKey(name: 'id_auteur', defaultValue: 0) int userId,
+    @JsonKey(name: 'image_url') String? imageUrl,
   });
 }
 
@@ -86,6 +89,7 @@ class _$ArticleCopyWithImpl<$Res, $Val extends Article>
     Object? categorie = null,
     Object? publie = null,
     Object? userId = null,
+    Object? imageUrl = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -121,6 +125,10 @@ class _$ArticleCopyWithImpl<$Res, $Val extends Article>
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
                       as int,
+            imageUrl: freezed == imageUrl
+                ? _value.imageUrl
+                : imageUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -144,6 +152,7 @@ abstract class _$$ArticleImplCopyWith<$Res> implements $ArticleCopyWith<$Res> {
     @JsonKey(defaultValue: 0) int categorie,
     @JsonKey(defaultValue: 0) int publie,
     @JsonKey(name: 'id_auteur', defaultValue: 0) int userId,
+    @JsonKey(name: 'image_url') String? imageUrl,
   });
 }
 
@@ -169,6 +178,7 @@ class __$$ArticleImplCopyWithImpl<$Res>
     Object? categorie = null,
     Object? publie = null,
     Object? userId = null,
+    Object? imageUrl = freezed,
   }) {
     return _then(
       _$ArticleImpl(
@@ -204,6 +214,10 @@ class __$$ArticleImplCopyWithImpl<$Res>
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
                   as int,
+        imageUrl: freezed == imageUrl
+            ? _value.imageUrl
+            : imageUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -221,6 +235,7 @@ class _$ArticleImpl implements _Article {
     @JsonKey(defaultValue: 0) required this.categorie,
     @JsonKey(defaultValue: 0) required this.publie,
     @JsonKey(name: 'id_auteur', defaultValue: 0) required this.userId,
+    @JsonKey(name: 'image_url') required this.imageUrl,
   });
 
   factory _$ArticleImpl.fromJson(Map<String, dynamic> json) =>
@@ -249,10 +264,13 @@ class _$ArticleImpl implements _Article {
   @override
   @JsonKey(name: 'id_auteur', defaultValue: 0)
   final int userId;
+  @override
+  @JsonKey(name: 'image_url')
+  final String? imageUrl;
 
   @override
   String toString() {
-    return 'Article(id: $id, titre: $titre, resume: $resume, contenu: $contenu, date_creation: $date_creation, categorie: $categorie, publie: $publie, userId: $userId)';
+    return 'Article(id: $id, titre: $titre, resume: $resume, contenu: $contenu, date_creation: $date_creation, categorie: $categorie, publie: $publie, userId: $userId, imageUrl: $imageUrl)';
   }
 
   @override
@@ -269,7 +287,9 @@ class _$ArticleImpl implements _Article {
             (identical(other.categorie, categorie) ||
                 other.categorie == categorie) &&
             (identical(other.publie, publie) || other.publie == publie) &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -284,6 +304,7 @@ class _$ArticleImpl implements _Article {
     categorie,
     publie,
     userId,
+    imageUrl,
   );
 
   /// Create a copy of Article
@@ -310,6 +331,7 @@ abstract class _Article implements Article {
     @JsonKey(defaultValue: 0) required final int categorie,
     @JsonKey(defaultValue: 0) required final int publie,
     @JsonKey(name: 'id_auteur', defaultValue: 0) required final int userId,
+    @JsonKey(name: 'image_url') required final String? imageUrl,
   }) = _$ArticleImpl;
 
   factory _Article.fromJson(Map<String, dynamic> json) = _$ArticleImpl.fromJson;
@@ -337,6 +359,9 @@ abstract class _Article implements Article {
   @override
   @JsonKey(name: 'id_auteur', defaultValue: 0)
   int get userId;
+  @override
+  @JsonKey(name: 'image_url')
+  String? get imageUrl;
 
   /// Create a copy of Article
   /// with the given fields replaced by the non-null parameter values.
