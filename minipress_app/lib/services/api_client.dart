@@ -20,8 +20,13 @@ class ApiClient {
 
   Future<Map<String, dynamic>> getArticleById(int id) async {
     final response = await _dio.get('/articles/$id');
-    final data = response.data;
-    return data['article'] as Map<String, dynamic>;
+    final data = response.data['article'] as Map<String, dynamic>;
+
+    if (data.containsKey('auteur') && !data.containsKey('id_auteur')) {
+      data['id_auteur'] = data['auteur'];
+    }
+
+    return data;
   }
 
   Future<List<Map<String, dynamic>>> getCategories() async {
