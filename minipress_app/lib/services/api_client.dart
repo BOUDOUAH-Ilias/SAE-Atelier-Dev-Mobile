@@ -33,10 +33,7 @@ class ApiClient {
   Future<List<Map<String, dynamic>>> getArticlesByCategorie(
     int categorieId,
   ) async {
-    final response = await _dio.get(
-      '/articles',
-      queryParameters: {'categorie': categorieId},
-    );
+    final response = await _dio.get('/categories/$categorieId/articles');
     final data = response.data;
     return List<Map<String, dynamic>>.from(data['articles']);
   }
