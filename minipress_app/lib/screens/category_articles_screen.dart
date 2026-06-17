@@ -17,6 +17,7 @@ class CategoryArticlesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncArticles = ref.watch(articlesByCategorieProvider(categorieId));
     final titre = nomCategorie ?? 'Catégorie #$categorieId';
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(title: Text(titre)),
@@ -29,19 +30,60 @@ class CategoryArticlesScreen extends ConsumerWidget {
               child: Text('Aucun article dans la catégorie "$titre".'),
             );
           }
-          return ListView(
-            children: articles.map((article) => ListTile(
-              title: Text(article.titre),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Article #${article.id}'),
-                  Text('Date : ${article.date_creation}'),
-                ],
-              ),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push('/articles/${article.id}'),
-            )).toList(),
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            itemCount: articles.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              final article = articles[index];
+              return Card(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => context.push('/articles/${article.id}'),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                article.titre,
+                                style: Theme.of(context).textTheme.titleSmall
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today_outlined,
+                                    size: 12,
+                                    color: colorScheme.outline,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    article.date_creation.substring(0, 10),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: colorScheme.outline,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: colorScheme.outlineVariant,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),

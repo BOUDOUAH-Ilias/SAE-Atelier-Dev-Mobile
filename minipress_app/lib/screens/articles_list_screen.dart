@@ -47,8 +47,8 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // On passe la query au provider — si vide, pas de ?q= envoyé
     final asyncArticles = ref.watch(articlesSearchProvider(_query));
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +62,13 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
                 ),
                 onChanged: (value) => setState(() => _query = value),
               )
-            : const Text('Articles'),
+            : const Text(
+                'MiniPress',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
+                ),
+              ),
         actions: [
           IconButton(
             tooltip: _searchVisible ? 'Fermer la recherche' : 'Rechercher',
@@ -84,19 +90,28 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
       body: Column(
         children: [
           const _CategoriesZone(),
-          const Divider(height: 1),
           // Indicateur de recherche active
           if (_query.isNotEmpty)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: Text(
-                'Résultats pour « $_query »',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: colorScheme.primaryContainer,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search,
+                    size: 14,
+                    color: colorScheme.onPrimaryContainer,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    'Résultats pour « $_query »',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                ],
               ),
             ),
           Expanded(
@@ -109,7 +124,11 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.search_off, size: 48),
+                        Icon(
+                          Icons.search_off,
+                          size: 48,
+                          color: colorScheme.outline,
+                        ),
                         const SizedBox(height: 12),
                         Text(
                           _query.isNotEmpty
@@ -122,8 +141,15 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
                   );
                 }
                 final sorted = _sorted(articles);
-                return ListView(
-                  children: sorted.map((article) {
+                return ListView.separated(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
+                  itemCount: sorted.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final article = sorted[index];
                     final asyncNomAuteur = ref.watch(
                       auteurNomProvider(article.userId),
                     );
@@ -131,32 +157,84 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
                       data: (nom) => nom,
                       orElse: () => 'Auteur #${article.userId}',
                     );
-                    return ListTile(
-                      title: Text(article.titre),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Article #${article.id}'),
-                          Text('Date : ${article.date_creation}'),
-                          GestureDetector(
-                            onTap: () => context.push(
-                              '/auteurs/${article.userId}',
-                              extra: nomAuteur,
-                            ),
-                            child: Text(
-                              'Auteur : $nomAuteur',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                decoration: TextDecoration.underline,
+                    return Card(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => context.go('/articles/${article.id}'),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      article.titre,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_today_outlined,
+                                          size: 12,
+                                          color: colorScheme.outline,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          article.date_creation.substring(
+                                            0,
+                                            10,
+                                          ),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: colorScheme.outline,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Icon(
+                                          Icons.person_outline,
+                                          size: 12,
+                                          color: colorScheme.outline,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        GestureDetector(
+                                          onTap: () => context.push(
+                                            '/auteurs/${article.userId}',
+                                            extra: nomAuteur,
+                                          ),
+                                          child: Text(
+                                            nomAuteur,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: colorScheme.primary,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
+                              Icon(
+                                Icons.chevron_right,
+                                color: colorScheme.outlineVariant,
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () => context.go('/articles/${article.id}'),
                     );
-                  }).toList(),
+                  },
                 );
               },
             ),
@@ -173,24 +251,32 @@ class _CategoriesZone extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncCategories = ref.watch(categoriesProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border(
+          bottom: BorderSide(color: colorScheme.outlineVariant, width: 0.5),
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Catégories',
-              style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            'CATÉGORIES',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
+              color: colorScheme.outline,
             ),
           ),
           const SizedBox(height: 8),
           SizedBox(
-            height: 40,
+            height: 36,
             child: asyncCategories.when(
               loading: () => const Center(
                 child: CircularProgressIndicator(strokeWidth: 2),
@@ -203,13 +289,16 @@ class _CategoriesZone extends ConsumerWidget {
               ),
               data: (categories) => ListView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: categories
                     .map(
                       (categorie) => Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: ActionChip(
-                          label: Text(categorie.nom),
+                          label: Text(
+                            categorie.nom,
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
                           onPressed: () => context.push(
                             '/categories/${categorie.id}',
                             extra: categorie.nom,

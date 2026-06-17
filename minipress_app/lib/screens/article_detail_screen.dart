@@ -16,7 +16,7 @@ class ArticleDetailScreen extends ConsumerWidget {
     final asyncArticle = ref.watch(articleDetailProvider(id));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Détail')),
+      appBar: AppBar(title: const Text('Article')),
       body: asyncArticle.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(child: Text('Erreur : $error')),
@@ -37,6 +37,8 @@ class ArticleDetailScreen extends ConsumerWidget {
             data: (nom) => nom,
             orElse: () => 'Auteur #${article.userId}',
           );
+
+          final colorScheme = Theme.of(context).colorScheme;
 
           return CustomScrollView(
             slivers: [
@@ -68,20 +70,32 @@ class ArticleDetailScreen extends ConsumerWidget {
                       Text(
                         article.titre,
                         style: Theme.of(context).textTheme.headlineSmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 6),
-
-                      // Date
-                      Text(
-                        article.date_creation,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withOpacity(0.55),
-                        ),
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              height: 1.25,
+                            ),
                       ),
                       const SizedBox(height: 12),
+
+                      // Meta : date + chips
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 13,
+                            color: colorScheme.outline,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            article.date_creation.substring(0, 10),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: colorScheme.outline,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
 
                       // Chips catégorie + auteur
                       Wrap(
@@ -89,9 +103,13 @@ class ArticleDetailScreen extends ConsumerWidget {
                         runSpacing: 8,
                         children: [
                           ActionChip(
-                            avatar: const Icon(Icons.category, size: 16),
+                            avatar: const Icon(
+                              Icons.category_outlined,
+                              size: 15,
+                            ),
                             label: Text(
                               nomCategorie ?? 'Catégorie #${article.categorie}',
+                              style: const TextStyle(fontSize: 13),
                             ),
                             onPressed: () => context.push(
                               '/categories/${article.categorie}',
@@ -99,8 +117,11 @@ class ArticleDetailScreen extends ConsumerWidget {
                             ),
                           ),
                           ActionChip(
-                            avatar: const Icon(Icons.person, size: 16),
-                            label: Text(nomAuteur),
+                            avatar: const Icon(Icons.person_outline, size: 15),
+                            label: Text(
+                              nomAuteur,
+                              style: const TextStyle(fontSize: 13),
+                            ),
                             onPressed: () => context.push(
                               '/auteurs/${article.userId}',
                               extra: nomAuteur,
@@ -108,20 +129,18 @@ class ArticleDetailScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
-                      // Résumé rendu en Markdown
+                      // Résumé
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerHighest,
+                          color: colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(10),
                           border: Border(
                             left: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: colorScheme.primary,
                               width: 3,
                             ),
                           ),
@@ -138,20 +157,18 @@ class ArticleDetailScreen extends ConsumerWidget {
                           onTapLink: (text, href, title) => _openUrl(href),
                         ),
                       ),
-                      const SizedBox(height: 24),
-
-                      // Divider avant le contenu
-                      const Divider(height: 1),
                       const SizedBox(height: 20),
+                      Divider(color: colorScheme.outlineVariant),
+                      const SizedBox(height: 12),
                     ],
                   ),
                 ),
               ),
 
-              // Contenu Markdown avec support des images réseau
+              // Contenu Markdown
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 48),
                   child: MarkdownBody(
                     data: article.contenu,
                     selectable: true,
@@ -167,14 +184,12 @@ class ArticleDetailScreen extends ConsumerWidget {
                           ),
                           p: Theme.of(
                             context,
-                          ).textTheme.bodyMedium?.copyWith(height: 1.6),
+                          ).textTheme.bodyMedium?.copyWith(height: 1.65),
                           blockquoteDecoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.surfaceContainerHighest,
+                            color: colorScheme.surfaceContainerHighest,
                             border: Border(
                               left: BorderSide(
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: colorScheme.secondary,
                                 width: 3,
                               ),
                             ),
@@ -200,8 +215,6 @@ class ArticleDetailScreen extends ConsumerWidget {
   }
 }
 
-/// Widget pour afficher les images réseau issues du Markdown,
-/// avec placeholder de chargement et fallback en cas d'erreur.
 class _NetworkImageWidget extends StatelessWidget {
   final Uri uri;
   final String? alt;
