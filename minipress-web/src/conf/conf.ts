@@ -1,1 +1,1 @@
-export const API_BASE_URL= "http://localhost:32327/"
+export const API_BASE_URL= "http://docketu.iutnc.univ-lorraine.fr:32327/"
