@@ -18,6 +18,15 @@ export class Articles {
     );
   }
 
+  async searchArticles(keyword: string): Promise<ArticleListItem[]> {
+    const url = new URL(`${this.baseUrl}api/articles`);
+    url.searchParams.set("q", keyword);
+    const res = await fetch(url.toString());
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+    const data: ArticlesResponse = await res.json();
+    return data.articles;
+  }
+
   async getArticlesByCategory(categoryId: number): Promise<ArticleListItem[]> {
     const res = await fetch(`${this.baseUrl}api/categories/${categoryId}/articles`);
     if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);

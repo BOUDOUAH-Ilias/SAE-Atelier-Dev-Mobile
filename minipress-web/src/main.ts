@@ -10,50 +10,49 @@ const renderer = new Renderer();
 
 let currentArticles: ArticleListItem[] = [];
 
-function displayArticles(articles: ArticleListItem[]): void {
-  currentArticles = articles;
+function sortBySelected(articles: ArticleListItem[]): ArticleListItem[] {
   const button = document.getElementById("order-button") as HTMLInputElement;
-  // console.log(button);
+  const sorted = [...articles];
   if (button.innerText == "descendant") {
-    currentArticles.sort((a: ArticleListItem, b: ArticleListItem) => {
+    sorted.sort((a: ArticleListItem, b: ArticleListItem) => {
       const dateA = new Date(a.article.date_creation);
       const dateB = new Date(b.article.date_creation);
-      if (dateA.getTime() > dateB.getTime()) {
-        return 1;
-      } else {
-        return -1;
-      }
+      return dateA.getTime() > dateB.getTime() ? 1 : -1;
     });
-    console.table(currentArticles);
   } else if (button.innerText == "ascendant") {
-    currentArticles.sort((a: ArticleListItem, b: ArticleListItem) => {
+    sorted.sort((a: ArticleListItem, b: ArticleListItem) => {
       const dateA = new Date(a.article.date_creation);
       const dateB = new Date(b.article.date_creation);
-      if (dateA.getTime() < dateB.getTime()) {
-        return 1;
-      } else {
-        return -1;
-      }
+      return dateA.getTime() < dateB.getTime() ? 1 : -1;
     });
-    console.table(currentArticles);
-  } else {
-    console.log("ça marche pas.");
   }
+  return sorted;
+}
+
+function displayArticles(articles: ArticleListItem[]): void {
+  currentArticles = sortBySelected(articles);
   applyFilter();
 }
 
-function applyFilter(): void {
+// Filtrage par mot clé dans le titre ou le résumé (fonction étendue 8).
+// Le résumé n'étant pas présent dans la liste renvoyée par l'api, la recherche
+// est déléguée à l'api via la query string /api/articles?q=...
+async function applyFilter(): Promise<void> {
   const keyword = (
     document.getElementById("filter-input") as HTMLInputElement
-  ).value
-    .trim()
-    .toLowerCase();
-  const filtered: ArticleListItem[] = keyword
-    ? currentArticles.filter((a) =>
-        a.article.titre.toLowerCase().includes(keyword),
-      )
-    : currentArticles;
-  renderer.renderArticles(filtered);
+  ).value.trim();
+
+  if (!keyword) {
+    renderer.renderArticles(currentArticles);
+    return;
+  }
+
+  try {
+    const results = await articlesApi.searchArticles(keyword);
+    renderer.renderArticles(sortBySelected(results));
+  } catch (e) {
+    renderer.renderError("Impossible de filtrer les articles.");
+  }
 }
 
 async function loadCategories(): Promise<void> {

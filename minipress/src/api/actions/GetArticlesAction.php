@@ -24,7 +24,9 @@ class GetArticlesAction
             return $rs->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
 
-        $articles = $service->getArticlesSorted($sort);
+        $q = $rq->getQueryParams()['q'] ?? null;
+
+        $articles = $service->getArticlesSorted($sort, $q);
 
         $data = [
             'type' => 'collection',

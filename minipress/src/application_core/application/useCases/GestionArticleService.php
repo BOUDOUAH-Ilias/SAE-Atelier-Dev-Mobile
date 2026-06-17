@@ -111,9 +111,17 @@ class GestionArticleService implements GestionArticleServiceInterface
         return Article::where('id_auteur', $idAuteur)->where('publie', 1)->with('auteur')->get()->all();
     }
 
-    public function getArticlesSorted(?string $sort): array
+    public function getArticlesSorted(?string $sort, ?string $q = null): array
     {
         $query = Article::where('publie', 1);
+
+        if ($q !== null && trim($q) !== '') {
+            $terme = '%' . trim($q) . '%';
+            $query->where(function ($sous) use ($terme) {
+                $sous->where('titre', 'like', $terme)
+                    ->orWhere('resume', 'like', $terme);
+            });
+        }
 
         switch ($sort) {
             case 'date-asc':
