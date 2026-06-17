@@ -23,30 +23,23 @@ class ApiClient {
     final data = response.data;
     final raw = List<dynamic>.from(data['articles']);
 
-    // L'API peut retourner soit une liste plate {titre, date_creation, ...}
-    // soit la structure wrappée {article: {...}, links: {...}}.
-    // On normalise dans les deux cas.
     return raw.map((item) {
       final map = item as Map<String, dynamic>;
       if (map.containsKey('article')) {
-        // Structure wrappée — on extrait et on injecte l'id depuis le lien
         final inner = Map<String, dynamic>.from(
           map['article'] as Map<String, dynamic>,
         );
-        // Extraire l'id depuis "links.self.href" = "api/articles/42"
         final href = map['links']?['self']?['href'] as String?;
         if (href != null && !inner.containsKey('id')) {
           final parts = href.split('/');
           final idStr = parts.isNotEmpty ? parts.last : null;
           if (idStr != null) inner['id'] = int.tryParse(idStr) ?? 0;
         }
-        // Normaliser le champ auteur
-        if (inner.containsKey('auteur') && !inner.containsKey('id_auteur')) {
-          inner['id_auteur'] = inner['auteur'];
+        if (data.containsKey('auteur') && !data.containsKey('id_auteur')) {
+          data['id_auteur'] = data['auteur'];
         }
         return inner;
       }
-      // Structure plate déjà correcte
       return map;
     }).toList();
   }
@@ -78,6 +71,24 @@ class ApiClient {
 
   Future<Map<String, dynamic>> getAuteurById(int id) async {
     final response = await _dio.get('/auteurs/$id');
-    return response.data as Map<String, dynamic>;
+    final data = response.data;
+
+    if (data == null) {
+      return {
+        'auteur': {'id': id, 'nom': null, 'prenom': null, 'pseudo': null},
+      };
+    }
+
+    if (data is Map<String, dynamic> && !data.containsKey('auteur')) {
+      return {'auteur': data};
+    }
+
+    return Map<String, dynamic>.from(data as Map);
+  }
+
+  Future<List<Map<String, dynamic>>> getArticlesByAuteur(int auteurId) async {
+    final response = await _dio.get('/auteurs/$auteurId/articles');
+    final data = response.data;
+    return List<Map<String, dynamic>>.from(data['articles']);
   }
 }

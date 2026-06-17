@@ -28,8 +28,12 @@ final articlesByCategorieProvider =
 
 final articlesByAuteurProvider =
     FutureProvider.family<List<ArticleReduit>, int>((ref, auteurId) async {
-      final articles = await ref.watch(articlesProvider.future);
-      return articles.where((article) => article.userId == auteurId).toList();
+      final client = ApiClient();
+      final rawArticles = await client.getArticlesByAuteur(auteurId);
+
+      return rawArticles
+          .map((item) => ArticleReduit.fromAuteurApi(item))
+          .toList();
     });
 
 final articlesSearchProvider =

@@ -26,4 +26,19 @@ class ArticleReduit with _$ArticleReduit {
 
   factory ArticleReduit.fromJson(Map<String, dynamic> json) =>
       _$ArticleReduitFromJson(json);
+
+  factory ArticleReduit.fromAuteurApi(Map<String, dynamic> json) {
+    final auteurMap = json['auteur'] as Map<String, dynamic>;
+    final userId = (auteurMap['id'] as num).toInt();
+
+    final urlStr = json['url'] as String;
+    final id = int.parse(urlStr.split('/').last);
+
+    return ArticleReduit(
+      id: id,
+      titre: json['titre'] as String,
+      date_creation: json['date_creation'] as String,
+      userId: userId,
+    );
+  }
 }
