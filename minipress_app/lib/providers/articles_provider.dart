@@ -19,19 +19,22 @@ Future<Article> articleDetail(ArticleDetailRef ref, int id) async {
   return Article.fromJson(data);
 }
 
-final articlesByCategorieProvider = FutureProvider.family<
-  List<ArticleReduit>,
-  int
->((ref, categorieId) async {
-  final client = ApiClient();
-  final data = await client.getArticlesByCategorie(categorieId);
-  return data.map((json) => ArticleReduit.fromApi(json)).toList();
-});
+final articlesByCategorieProvider =
+    FutureProvider.family<List<ArticleReduit>, int>((ref, categorieId) async {
+      final client = ApiClient();
+      final data = await client.getArticlesByCategorie(categorieId);
+      return data.map((json) => ArticleReduit.fromApi(json)).toList();
+    });
 
-final articlesByAuteurProvider = FutureProvider.family<
-  List<ArticleReduit>,
-  int
->((ref, auteurId) async {
-  final articles = await ref.watch(articlesProvider.future);
-  return articles.where((article) => article.userId == auteurId).toList();
-});
+final articlesByAuteurProvider =
+    FutureProvider.family<List<ArticleReduit>, int>((ref, auteurId) async {
+      final articles = await ref.watch(articlesProvider.future);
+      return articles.where((article) => article.userId == auteurId).toList();
+    });
+
+final articlesSearchProvider =
+    FutureProvider.family<List<ArticleReduit>, String>((ref, query) async {
+      final client = ApiClient();
+      final data = await client.getArticles(q: query.isEmpty ? null : query);
+      return data.map(ArticleReduit.fromJson).toList();
+    });

@@ -15,6 +15,15 @@ class ArticlesListScreen extends ConsumerStatefulWidget {
 
 class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
   bool _sortAscending = false;
+  bool _searchVisible = false;
+  final _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   List<ArticleReduit> _sorted(List<ArticleReduit> articles) {
     final result = [...articles];
@@ -26,34 +35,92 @@ class _ArticlesListScreenState extends ConsumerState<ArticlesListScreen> {
     return result;
   }
 
+  void _toggleSearch() {
+    setState(() {
+      _searchVisible = !_searchVisible;
+      if (!_searchVisible) {
+        _searchController.clear();
+        _query = '';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final asyncArticles = ref.watch(articlesProvider);
+    // On passe la query au provider — si vide, pas de ?q= envoyé
+    final asyncArticles = ref.watch(articlesSearchProvider(_query));
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Articles'),
+        title: _searchVisible
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Rechercher dans titres et résumés…',
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) => setState(() => _query = value),
+              )
+            : const Text('Articles'),
         actions: [
           IconButton(
-            tooltip: _sortAscending
-                ? 'Tri : ancien → récent'
-                : 'Tri : récent → ancien',
-            icon: Icon(
-              _sortAscending ? Icons.arrow_upward : Icons.arrow_downward,
-            ),
-            onPressed: () => setState(() => _sortAscending = !_sortAscending),
+            tooltip: _searchVisible ? 'Fermer la recherche' : 'Rechercher',
+            icon: Icon(_searchVisible ? Icons.close : Icons.search),
+            onPressed: _toggleSearch,
           ),
+          if (!_searchVisible)
+            IconButton(
+              tooltip: _sortAscending
+                  ? 'Tri : ancien → récent'
+                  : 'Tri : récent → ancien',
+              icon: Icon(
+                _sortAscending ? Icons.arrow_upward : Icons.arrow_downward,
+              ),
+              onPressed: () => setState(() => _sortAscending = !_sortAscending),
+            ),
         ],
       ),
       body: Column(
         children: [
           const _CategoriesZone(),
           const Divider(height: 1),
+          // Indicateur de recherche active
+          if (_query.isNotEmpty)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: Text(
+                'Résultats pour « $_query »',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+              ),
+            ),
           Expanded(
             child: asyncArticles.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, _) => Center(child: Text('Erreur : $error')),
               data: (articles) {
+                if (articles.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.search_off, size: 48),
+                        const SizedBox(height: 12),
+                        Text(
+                          _query.isNotEmpty
+                              ? 'Aucun article pour « $_query »'
+                              : 'Aucun article disponible',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
+                  );
+                }
                 final sorted = _sorted(articles);
                 return ListView(
                   children: sorted.map((article) {
@@ -137,16 +204,20 @@ class _CategoriesZone extends ConsumerWidget {
               data: (categories) => ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: categories.map((categorie) => Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ActionChip(
-                    label: Text(categorie.nom),
-                    onPressed: () => context.push(
-                      '/categories/${categorie.id}',
-                      extra: categorie.nom,
-                    ),
-                  ),
-                )).toList(),
+                children: categories
+                    .map(
+                      (categorie) => Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ActionChip(
+                          label: Text(categorie.nom),
+                          onPressed: () => context.push(
+                            '/categories/${categorie.id}',
+                            extra: categorie.nom,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ),
