@@ -13,6 +13,6 @@ class GetHomeAction
     public function __invoke(Request $request, Response $response): Response
     {
         $view = Twig::fromRequest($request);
-        return $view->render($response, 'home.html.twig');
+        return $view->render($response, 'accueil.twig');
     }
 }

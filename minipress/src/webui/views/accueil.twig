@@ -1,0 +1,18 @@
+{% extends "home.html.twig" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<h2>Bienvenue sur Minipress</h2>
+<p>Minipress est une plateforme de publication d'articles. Consultez les articles publiés ou connectez-vous pour en rédiger.</p>
+
+
+    <a href="{{ base_path }}/articles" class="btn btn-success">Voir les articles</a>
+    {% if current_user %}
+        <a href="{{ base_path }}/article/create" class="btn">Nouvel article</a>
+        <a href="{{ base_path }}/maliste" class="btn">Mes articles</a>
+    {% else %}
+        <a href="{{ base_path }}/signin" class="btn">Se connecter</a>
+    {% endif %}
+
+{% endblock %}
