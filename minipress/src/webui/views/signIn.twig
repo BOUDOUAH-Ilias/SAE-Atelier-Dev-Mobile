@@ -22,7 +22,10 @@
 
         <div>
             <label>Mot de passe</label><br>
-            <input type="password" name="password" required>
+            <div style="display:inline-flex; align-items:center; gap:6px;">
+                <input type="password" name="password" id="password" required>
+                <button type="button" onclick="togglePassword()" id="toggleBtn" style="cursor:pointer;">Afficher</button>
+            </div>
         </div>
 
         <br>
@@ -30,5 +33,19 @@
         <button type="submit">Se connecter</button>
 
     </form>
+
+    <script>
+        function togglePassword() {
+            var input = document.getElementById('password');
+            var btn = document.getElementById('toggleBtn');
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = 'Masquer';
+            } else {
+                input.type = 'password';
+                btn.textContent = 'Afficher';
+            }
+        }
+    </script>
 
 {% endblock %}
