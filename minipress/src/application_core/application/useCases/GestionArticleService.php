@@ -72,6 +72,25 @@ class GestionArticleService implements GestionArticleServiceInterface
             ->get()->toArray();
     }
 
+    public function getAllArticlesByCategorie(int $idCategorie): array
+    {
+        return Article::with('auteur')
+            ->where('id_categorie', $idCategorie)
+            ->orderBy('date_creation', 'desc')
+            ->get()->toArray();
+    }
+
+    public function getArticlesByCategorieForUser(int $idCategorie, int $userId): array
+    {
+        return Article::with('auteur')
+            ->where('id_categorie', $idCategorie)
+            ->where(function ($query) use ($userId) {
+                $query->where('publie', 1)->orWhere('id_auteur', $userId);
+            })
+            ->orderBy('date_creation', 'desc')
+            ->get()->toArray();
+    }
+
     public function getArticles(): array
     {
         return Article::with('auteur')->where('publie', 1)->get()->toArray();

@@ -14,5 +14,8 @@ interface GestionArticleServiceInterface{
 
     public function getArticleByCategorie(int $idCategorie): array;
 
+    public function getAllArticlesByCategorie(int $idCategorie): array;
+
+    public function getArticlesByCategorieForUser(int $idCategorie, int $userId): array;
 
 }

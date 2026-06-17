@@ -14,14 +14,23 @@ use minipress\application_core\application\useCases\CategorieService;
 class ShowListArticleByCategorieAction {
 
     public function __invoke(Request $request, Response $response, array $args): Response {
-        $view = Twig::fromRequest($request);
-        $currentUser = new GestionUserService()->getCurrentUser();
+        $view        = Twig::fromRequest($request);
+        $currentUser = (new GestionUserService())->getCurrentUser();
         $categoryId  = (int) $args['id'];
+        $service     = new GestionArticleService();
+
+        if ($currentUser && $currentUser->is_admin === 1) {
+            $articles = $service->getAllArticlesByCategorie($categoryId);
+        } elseif ($currentUser) {
+            $articles = $service->getArticlesByCategorieForUser($categoryId, (int) $currentUser->id);
+        } else {
+            $articles = $service->getArticleByCategorie($categoryId);
+        }
 
         return $view->render($response, 'list.article.twig', [
-            'articles'     => new GestionArticleService()->getArticleByCategorie($categoryId),
+            'articles'     => $articles,
             'current_user' => $currentUser,
-            'categories'   => new CategorieService()->getCategories(),
+            'categories'   => (new CategorieService())->getCategories(),
             'active_cat'   => $categoryId,
         ]);
     }
