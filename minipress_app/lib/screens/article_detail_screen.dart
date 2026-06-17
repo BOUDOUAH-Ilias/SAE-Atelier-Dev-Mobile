@@ -40,15 +40,17 @@ class ArticleDetailScreen extends ConsumerWidget {
 
           return CustomScrollView(
             slivers: [
-              // Image de couverture en SliverAppBar si image_url présente
+              // Image de couverture
               if (article.imageUrl != null && article.imageUrl!.isNotEmpty)
-                SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  expandedHeight: 220,
-                  pinned: false,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Image.network(
+                SliverToBoxAdapter(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.circular(12),
+                    ),
+                    child: Image.network(
                       article.imageUrl!,
+                      height: 220,
+                      width: double.infinity,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           const SizedBox.shrink(),
